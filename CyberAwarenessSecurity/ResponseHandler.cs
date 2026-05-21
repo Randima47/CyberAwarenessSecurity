@@ -1,26 +1,71 @@
-﻿using System;
+﻿using CyberAwarenessSecurity;
+using System;
 using System.Collections.Generic;
 
-namespace CyberAwarenessSecurity
+namespace CyberSeccBot
 {
     public static class ResponseHandler
     {
-        // Memory store for user interests
-        private static Dictionary<string, string> memory = new Dictionary<string, string>();
+        // Track last topic for conversation flow
+        private static string lastTopic = "";
+
+        // Dictionary for static keyword → response mapping
+        private static readonly Dictionary<string, string> staticResponses = new Dictionary<string, string>
+        {
+            { "firewall", "A firewall acts like a security guard. Tip: Use both network and application firewalls for layered defense." },
+            { "social engineering", "Social engineering manipulates people. Tip: Verify requests through official channels before sharing sensitive data." },
+            { "ransomware", "Ransomware locks your files. Tip: Keep offline backups and segment your network." },
+            { "antivirus", "Antivirus software detects and removes malicious programs. Tip: Pair antivirus with endpoint detection and response (EDR)." },
+            { "vpn", "A VPN encrypts your internet connection. Tip: Choose a trustworthy provider and avoid free VPNs." },
+            { "scam", "Scams trick you into giving away info. Tip: Always double-check sources before responding." },
+            { "privacy", "Privacy matters. Tip: Review your social media settings and avoid oversharing personal details." },
+            { "identity theft", "Identity theft happens when attackers steal your personal info. Tip: Monitor your accounts and use alerts for suspicious activity." },
+            { "social media", "Social media can expose personal data. Tip: Limit what you share and adjust privacy settings." },
+            { "cyberbullying", "Cyberbullying harms people online. Tip: Report abusive behavior and avoid engaging with bullies." }
+        };
+
+        // Random responses for dynamic topics
+        private static readonly Dictionary<string, string[]> randomResponses = new Dictionary<string, string[]>
+        {
+            { "phishing", new [] {
+                "Be cautious of emails asking for personal info.",
+                "Hover over links before clicking.",
+                "Enable 2FA to reduce damage.",
+                "Check sender addresses carefully — scammers often mimic trusted domains."
+            }},
+            { "password", new [] {
+                "Use long, unique passwords.",
+                "Avoid personal details in passwords.",
+                "Change passwords regularly.",
+                "Enable two-factor authentication."
+            }},
+            { "safe browsing", new [] {
+                "Avoid suspicious links.",
+                "Use HTTPS but stay cautious.",
+                "Install browser security extensions.",
+                "Don’t download from unknown sites."
+            }},
+            { "malware", new [] {
+                "Keep your OS patched.",
+                "Avoid running as admin unnecessarily.",
+                "Use reputable antivirus software.",
+                "Don’t install software from unknown sources."
+            }}
+        };
 
         public static string GetResponse(string input, string userName)
         {
             input = input.ToLower();
 
-            // 1. Sentiment Detection
-            if (input.Contains("worried") || input.Contains("scared"))
-                return $"It’s understandable to feel that way, {userName}. Scammers can be convincing — here’s a tip: Always verify links before clicking.";
-            if (input.Contains("frustrated") || input.Contains("angry"))
-                return $"I hear your frustration, {userName}. Cybersecurity can be overwhelming, but small steps like using strong passwords make a big difference.";
-            if (input.Contains("curious"))
-                return $"Curiosity is great, {userName}! Let’s explore phishing first — attackers often disguise themselves as trusted organisations.";
+            // 1. Sentiment detection
+            string sentimentResponse = SentimentAnalyzer.Analyze(input, userName);
+            if (sentimentResponse != null)
+            {
+                // Auto-continue with a relevant tip
+                return sentimentResponse + "\nTip: " + GetRandomTip("phishing");
+            }
 
-            // 2. Personality Responses
+            // 2. Personality responses
             if (input.Contains("how are you"))
                 return $"I’m really good, thanks for asking, {userName}! How are you feeling today?";
             if (input.Contains("your name"))
@@ -29,177 +74,74 @@ namespace CyberAwarenessSecurity
                 return $"Randima Ndivho built me for a project to raise cybersecurity awareness. What do you think inspired him to build me, {userName}?";
 
             // 3. Help / Topics
-            if (input.Contains("what kind of questions") || input.Contains("what can i ask"))
-            {
-                return $"Here are the exact questions you can ask me, {userName}:\n" +
-                       "- how are you\n" +
-                       "- your name\n" +
-                       "- who created\n" +
-                       "- purpose\n" +
-                       "- help / topics / learn\n\n" +
-                       "And for cybersecurity awareness:\n" +
-                       "- phishing\n" +
-                       "- password safety\n" +
-                       "- safe browsing\n" +
-                       "- malware\n" +
-                       "- firewall\n" +
-                       "- social engineering\n" +
-                       "- ransomware\n" +
-                       "- two-factor authentication (2FA)\n" +
-                       "- antivirus\n" +
-                       "- vpn\n\n" +
-                       "Try one of these and I’ll guide you through it.";
-            }
-
-            if (input.Contains("purpose"))
-                return $"Cybersecurity is the practice of protecting systems, networks, and data from digital attacks.\n\n" +
-                       "Advantages: It keeps personal information safe, prevents financial loss, and builds trust online.\n" +
-                       "Disadvantages: It can be costly, requires constant updates, and attackers are always evolving.\n\n" +
-                       $"My purpose is to help you, {userName}, understand these concepts and stay safe online.";
-
             if (input.Contains("help") || input.Contains("topics") || input.Contains("learn"))
+                return $"I can teach you about these cybersecurity topics, {userName}:\n- Phishing\n- Password safety\n- Safe browsing\n- Malware\n- Firewall\n- Social engineering\n- Ransomware\n- Two-factor authentication (2FA)\n- Antivirus\n- VPN\n- Scam\n- Privacy\n- Identity theft\n- Social media\n- Cyberbullying\n\nWhich one would you like to learn about first?";
+
+            // 4. Awareness topics (random + static)
+            foreach (var kvp in randomResponses)
             {
-                return $"I can teach you about these cybersecurity topics, {userName}:\n" +
-                       "- Phishing\n" +
-                       "- Password safety\n" +
-                       "- Safe browsing\n" +
-                       "- Malware\n" +
-                       "- Firewall\n" +
-                       "- Social engineering\n" +
-                       "- Ransomware\n" +
-                       "- Two-factor authentication (2FA)\n" +
-                       "- Antivirus\n" +
-                       "- VPN\n\n" +
-                       "Which one would you like to learn about first?";
+                if (input.Contains(kvp.Key))
+                {
+                    lastTopic = kvp.Key;
+                    return $"{Capitalize(kvp.Key)} awareness, {userName}:\nTip: {GetRandomTip(kvp.Key)}";
+                }
             }
 
-            // 4. Awareness Topics + Random Responses
-            if (input.Contains("phishing"))
+            foreach (var kvp in staticResponses)
             {
-                string[] tips = {
-                    "Be cautious of emails asking for personal info.",
-                    "Hover over links before clicking.",
-                    "Enable 2FA to reduce damage.",
-                    "Check sender addresses carefully — scammers often mimic trusted domains."
-                };
-                Random rand = new Random();
-                return $"Phishing is when attackers trick you into giving personal info, {userName}.\nTip: {tips[rand.Next(tips.Length)]}";
+                if (input.Contains(kvp.Key))
+                {
+                    lastTopic = kvp.Key;
+                    return kvp.Value.Replace("Tip:", $"Tip for you, {userName}:");
+                }
             }
 
-            if (input.Contains("password"))
-                return $"Strong passwords are your first defense, {userName}.\nTip: Use a password manager and enable two-factor authentication.";
-
-            if (input.Contains("safe browsing"))
-                return $"Safe browsing keeps you away from traps, {userName}.\nTip: Use browser security extensions and avoid downloads from unknown sites.";
-
-            if (input.Contains("malware"))
-                return $"Malware is malicious software, {userName}.\nTip: Keep your OS patched and avoid running as admin unnecessarily.";
-
-            if (input.Contains("firewall"))
-                return $"A firewall acts like a security guard, {userName}.\nTip: Use both network and application firewalls for layered defense.";
-
-            if (input.Contains("social engineering"))
-                return $"Social engineering manipulates people, {userName}.\nTip: Verify requests through official channels before sharing sensitive data.";
-
-            if (input.Contains("ransomware"))
-                return $"Ransomware locks your files, {userName}.\nTip: Keep offline backups and segment your network.";
-
-            if (input.Contains("two-factor") || input.Contains("2fa"))
-                return $"Two-factor authentication adds an extra layer of security, {userName}.\nTip: Use hardware tokens (like YubiKey) for stronger protection.";
-
-            if (input.Contains("antivirus"))
-                return $"Antivirus software detects and removes malicious programs, {userName}.\nTip: Pair antivirus with endpoint detection and response (EDR).";
-
-            if (input.Contains("vpn"))
-                return $"A VPN encrypts your internet connection, {userName}.\nTip: Choose a trustworthy provider and avoid free VPNs.";
-
-            // 5. Memory & Recall
+            // 5. Memory & recall
             if (input.Contains("remember my topic"))
             {
-                memory["topic"] = "privacy";
+                MemoryManager.Remember("topic", "privacy");
                 return $"Got it, {userName}. I’ll remember that you’re interested in privacy.";
             }
-
             if (input.Contains("what do i like"))
             {
-                return memory.ContainsKey("topic")
-                    ? $"You mentioned {memory["topic"]} earlier, {userName}. Let’s dive deeper into that."
-                    : $"I don’t recall a topic yet, {userName}. Tell me what you’re interested in.";
+                string topic = MemoryManager.Recall("topic");
+                return topic != null ? $"You mentioned {topic} earlier, {userName}. Let’s dive deeper into that."
+                                     : $"I don’t recall a topic yet, {userName}. Tell me what you’re interested in.";
             }
 
-            // 6. Conversation Flow
+            // 6. Conversation flow (continue last topic)
             if (input.Contains("tell me more") || input.Contains("give me another tip") || input.Contains("explain more"))
             {
-                string[] moreTips = {
-                    "Always update your software to patch vulnerabilities.",
-                    "Use multi-factor authentication wherever possible.",
-                    "Be cautious of links in unexpected emails.",
-                    "Regularly back up your important files."
-                };
-                Random rand = new Random();
-                return moreTips[rand.Next(moreTips.Length)];
+                if (!string.IsNullOrEmpty(lastTopic))
+                    return $"Another {lastTopic} tip, {userName}: {GetRandomTip(lastTopic)}";
+                else
+                    return $"Let’s start fresh, {userName}. Ask me about phishing, passwords, or privacy.";
             }
 
-            // 7. Fallback
+            // 7. Error handling
+            if (string.IsNullOrWhiteSpace(input))
+                return $"That looks empty, {userName}. Try typing a question like 'Tell me about phishing'.";
+            if (input.Length < 3)
+                return $"That looks like gibberish, {userName}. Try asking about a topic like phishing or privacy.";
+
+            // 8. Fallback
             return $"I’m not sure I understand, {userName}. Can you try rephrasing?";
         }
 
-        public static string GetFollowUp(string followUp, string originalInput, string userName)
+        private static string GetRandomTip(string topic)
         {
-            followUp = followUp.ToLower();
-
-            if (originalInput.Contains("how are you"))
+            if (randomResponses.ContainsKey(topic))
             {
-                if (followUp.Contains("fine") || followUp.Contains("good"))
-                    return $"Glad to hear that, {userName}!";
-                else if (followUp.Contains("not good") || followUp.Contains("bad") || followUp.Contains("sad"))
-                    return $"I’m sorry to hear that, {userName}. Stay strong!";
-                else
-                    return $"Thanks for sharing, {userName}!";
+                Random rand = new Random();
+                string[] tips = randomResponses[topic];
+                return tips[rand.Next(tips.Length)];
             }
+            return "Stay safe online!";
+        }
 
-            if (originalInput.Contains("who created"))
-            {
-                if (followUp.Contains("because") || followUp.Contains("i wanted") || followUp.Contains("i built"))
-                    return $"That’s inspiring, {userName}! Building me to raise cybersecurity awareness shows real vision.";
-                else
-                    return $"Interesting, {userName}! Whatever the reason, I’m glad to exist and help spread awareness.";
-            }
-
-            if (originalInput.Contains("your name"))
-            {
-                string normalized = followUp.ToLower();
-
-                if (normalized.Contains("call you"))
-                {
-                    string newName = normalized
-                        .Replace("i'll call you", "")
-                        .Replace("i would like to call you", "")
-                        .Replace("i'd like to call you", "")
-                        .Trim();
-                    return $"Got it, {userName}, you can call me {newName} from now on.";
-                }
-                else if (normalized.Contains("you are") || normalized.Contains("you're"))
-                {
-                    string newName = normalized
-                        .Replace("you are", "")
-                        .Replace("you're", "")
-                        .Trim();
-                    return $"Nice name, {userName}! I guess I’m {newName}. I’ll remember that.";
-                }
-                else
-                {
-                    return $"Alright, {userName}, I’ll just stick with CyberSecurityBot though.";
-                }
-            }
-
-            if (originalInput.Contains("help") || originalInput.Contains("topics") || originalInput.Contains("learn"))
-                return GetResponse(followUp, userName);
-
-            if (originalInput.Contains("purpose"))
-                return GetResponse(followUp, userName);
-
-            return $"Thanks for your answer, {userName}!";
+        private static string Capitalize(string word)
+        {
+            return char.ToUpper(word[0]) + word.Substring(1);
         }
     }
 }
