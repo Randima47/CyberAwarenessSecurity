@@ -1,4 +1,4 @@
-﻿using CyberAwarenessSecurity;
+﻿using CyberSeccBot;
 using System;
 using System.Windows;
 using System.Windows.Documents;
@@ -17,11 +17,14 @@ namespace CyberAwarenessSecurity
             AddBotMessage("Welcome to CyberSecurity AwarenessBot! Please enter your name to begin.");
         }
 
-        // Handle Ask button click
         private void AskButton_Click(object sender, RoutedEventArgs e)
         {
             string input = UserInput.Text.Trim();
-            if (string.IsNullOrWhiteSpace(input)) return;
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                AddBotMessage("That looks empty. Please type a question or topic.");
+                return;
+            }
 
             // First input sets user name
             if (userName == "Guest")
@@ -36,7 +39,7 @@ namespace CyberAwarenessSecurity
             // Show user message
             AddUserMessage(input);
 
-            // Get bot response (ResponseHandler integrates SentimentAnalyzer + MemoryManager)
+            // Get bot response
             string response = ResponseHandler.GetResponse(input, userName);
 
             // Show bot response
@@ -49,32 +52,30 @@ namespace CyberAwarenessSecurity
             UserInput.Clear();
         }
 
-        // Handle Clear button click
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             ChatDisplay.Document.Blocks.Clear();
-            MemoryManager.Clear();
-            AddBotMessage("Chat cleared. Start again whenever you’re ready!");
+            AddBotMessage(MemoryManager.Clear(userName));
             userName = "Guest";
             lastUserInput = "";
         }
 
-        // Add user message to chat
         private void AddUserMessage(string text)
         {
             Paragraph p = new Paragraph(new Run($"You: {text}"))
             {
-                Foreground = Brushes.Cyan
+                Foreground = Brushes.Cyan,
+                Margin = new Thickness(0, 5, 0, 5)
             };
             ChatDisplay.Document.Blocks.Add(p);
         }
 
-        // Add bot message to chat
         private void AddBotMessage(string text)
         {
             Paragraph p = new Paragraph(new Run($"Bot: {text}"))
             {
-                Foreground = Brushes.LightGreen
+                Foreground = Brushes.LightGreen,
+                Margin = new Thickness(0, 5, 0, 5)
             };
             ChatDisplay.Document.Blocks.Add(p);
         }
