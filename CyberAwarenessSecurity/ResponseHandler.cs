@@ -1,15 +1,12 @@
-﻿using CyberAwarenessSecurity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace CyberSeccBot
+namespace CyberAwarenessSecurity
 {
     public static class ResponseHandler
     {
-        // Track last topic for conversation flow
         private static string lastTopic = "";
 
-        // Dictionary for static keyword → response mapping
         private static readonly Dictionary<string, string> staticResponses = new Dictionary<string, string>
         {
             { "firewall", "A firewall acts like a security guard. Tip: Use both network and application firewalls for layered defense." },
@@ -24,7 +21,6 @@ namespace CyberSeccBot
             { "cyberbullying", "Cyberbullying harms people online. Tip: Report abusive behavior and avoid engaging with bullies." }
         };
 
-        // Random responses for dynamic topics
         private static readonly Dictionary<string, string[]> randomResponses = new Dictionary<string, string[]>
         {
             { "phishing", new [] {
@@ -55,15 +51,15 @@ namespace CyberSeccBot
 
         public static string GetResponse(string input, string userName)
         {
+            if (string.IsNullOrWhiteSpace(input))
+                return $"That looks empty, {userName}. Try typing a question like 'Tell me about phishing'.";
+
             input = input.ToLower();
 
             // 1. Sentiment detection
             string sentimentResponse = SentimentAnalyzer.Analyze(input, userName);
             if (sentimentResponse != null)
-            {
-                // Auto-continue with a relevant tip
                 return sentimentResponse + "\nTip: " + GetRandomTip("phishing");
-            }
 
             // 2. Personality responses
             if (input.Contains("how are you"))
@@ -77,7 +73,7 @@ namespace CyberSeccBot
             if (input.Contains("help") || input.Contains("topics") || input.Contains("learn"))
                 return $"I can teach you about these cybersecurity topics, {userName}:\n- Phishing\n- Password safety\n- Safe browsing\n- Malware\n- Firewall\n- Social engineering\n- Ransomware\n- Two-factor authentication (2FA)\n- Antivirus\n- VPN\n- Scam\n- Privacy\n- Identity theft\n- Social media\n- Cyberbullying\n\nWhich one would you like to learn about first?";
 
-            // 4. Awareness topics (random + static)
+            // 4. Awareness topics
             foreach (var kvp in randomResponses)
             {
                 if (input.Contains(kvp.Key))
@@ -99,17 +95,17 @@ namespace CyberSeccBot
             // 5. Memory & recall
             if (input.Contains("remember my topic"))
             {
-                MemoryManager.Remember("topic", "privacy");
+                MemoryManager.Remember("topic", "privacy", userName);
                 return $"Got it, {userName}. I’ll remember that you’re interested in privacy.";
             }
             if (input.Contains("what do i like"))
             {
-                string topic = MemoryManager.Recall("topic");
+                string topic = MemoryManager.Recall("topic", userName);
                 return topic != null ? $"You mentioned {topic} earlier, {userName}. Let’s dive deeper into that."
                                      : $"I don’t recall a topic yet, {userName}. Tell me what you’re interested in.";
             }
 
-            // 6. Conversation flow (continue last topic)
+            // 6. Conversation flow
             if (input.Contains("tell me more") || input.Contains("give me another tip") || input.Contains("explain more"))
             {
                 if (!string.IsNullOrEmpty(lastTopic))
@@ -118,9 +114,7 @@ namespace CyberSeccBot
                     return $"Let’s start fresh, {userName}. Ask me about phishing, passwords, or privacy.";
             }
 
-            // 7. Error handling
-            if (string.IsNullOrWhiteSpace(input))
-                return $"That looks empty, {userName}. Try typing a question like 'Tell me about phishing'.";
+            // 7. Gibberish check
             if (input.Length < 3)
                 return $"That looks like gibberish, {userName}. Try asking about a topic like phishing or privacy.";
 
@@ -145,3 +139,4 @@ namespace CyberSeccBot
         }
     }
 }
+
