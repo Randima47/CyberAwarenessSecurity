@@ -9,6 +9,7 @@ namespace CyberAwarenessSecurity
     public partial class MainWindow : Window
     {
         private string userName = "Guest";
+        private string lastUserInput = "";
 
         public MainWindow()
         {
@@ -35,11 +36,14 @@ namespace CyberAwarenessSecurity
             // Show user message
             AddUserMessage(input);
 
-            // Get bot response from ResponseHandler
+            // Get bot response (ResponseHandler integrates SentimentAnalyzer + MemoryManager)
             string response = ResponseHandler.GetResponse(input, userName);
 
             // Show bot response
             AddBotMessage(response);
+
+            // Store last input for follow-up flow
+            lastUserInput = input;
 
             // Clear input
             UserInput.Clear();
@@ -49,7 +53,10 @@ namespace CyberAwarenessSecurity
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             ChatDisplay.Document.Blocks.Clear();
+            MemoryManager.Clear();
             AddBotMessage("Chat cleared. Start again whenever you’re ready!");
+            userName = "Guest";
+            lastUserInput = "";
         }
 
         // Add user message to chat
@@ -73,4 +80,3 @@ namespace CyberAwarenessSecurity
         }
     }
 }
-
