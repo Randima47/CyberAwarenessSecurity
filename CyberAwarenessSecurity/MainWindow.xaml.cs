@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Input;
 
 namespace CyberAwarenessSecurity
 {
@@ -15,8 +16,19 @@ namespace CyberAwarenessSecurity
         {
             InitializeComponent();
             AddBotMessage("Welcome to CyberSecurity AwarenessBot! Please enter your name to begin.");
+
+            // Bind Enter key to AskButton_Click
+            UserInput.KeyDown += UserInput_KeyDown;
         }
 
+        private void UserInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                AskButton_Click(sender, e);
+                e.Handled = true; 
+            }
+        }
         private void AskButton_Click(object sender, RoutedEventArgs e)
         {
             string input = UserInput.Text.Trim();
