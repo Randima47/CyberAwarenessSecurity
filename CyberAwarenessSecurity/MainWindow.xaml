@@ -16,7 +16,7 @@
 
         <!-- Banner / Logo -->
         <TextBlock Text="CyberSecurity AwarenessBot"
-                   Foreground="Yellow"
+                   Foreground="Red"
                    FontSize="28"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
@@ -28,8 +28,8 @@
 
         <!-- Subtitle -->
         <TextBlock Grid.Row="1"
-                   Text="Your guide to staying safe online"
-                   Foreground="LightBlue"
+                   Text="Outsmarting hackers so you don't have to"
+                   Foreground="Cyan"
                    FontSize="16"
                    HorizontalAlignment="Center"
                    Margin="0,5,0,15"

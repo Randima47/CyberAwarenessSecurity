@@ -32,7 +32,7 @@ namespace CyberAwarenessSecurity
                 return $"I know it can feel overwhelming, {userName}. Cyber threats are everywhere, but focusing on one step at a time helps. Let’s begin with firewall basics.";
 
             if (input.Contains("bored"))
-                return $"Feeling bored, {userName}? Let’s spice things up with a quick scam awareness tip — it might surprise you how creative attackers can be.";
+                return $"Feeling bored, {userName}? Let’s spice things up with a quick scam awareness tip, it might surprise you how creative attackers can be.";
 
             if (input.Contains("motivated") || input.Contains("driven"))
                 return $"Love that motivation, {userName}! Let’s put it to use by learning about identity theft prevention.";
