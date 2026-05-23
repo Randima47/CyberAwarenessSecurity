@@ -91,25 +91,37 @@ namespace CyberAwarenessSecurity
                     return kvp.Value.Replace("Tip:", $"Tip for you, {userName}:");
                 }
             }
-            
+
             // 5. Memory & recall
-            if (input.StartsWith("remember my topic"))
+            if (input.StartsWith("remember my topic") ||
+                input.StartsWith("remember ") ||
+                input.StartsWith("i like ") ||
+                input.StartsWith("favorite topic is "))
             {
-                
                 string[] parts = input.Split(' ');
-                if (parts.Length > 3)
+                string topicToRemember = "";
+
+                if (input.StartsWith("remember my topic") && parts.Length > 3)
+                    topicToRemember = string.Join(" ", parts, 3, parts.Length - 3);
+                else if (input.StartsWith("remember ") && parts.Length > 1)
+                    topicToRemember = string.Join(" ", parts, 1, parts.Length - 1);
+                else if (input.StartsWith("i like ") && parts.Length > 2)
+                    topicToRemember = string.Join(" ", parts, 2, parts.Length - 2);
+                else if (input.StartsWith("favorite topic is ") && parts.Length > 3)
+                    topicToRemember = string.Join(" ", parts, 3, parts.Length - 3);
+
+                if (!string.IsNullOrEmpty(topicToRemember))
                 {
-                    string topicToRemember = string.Join(" ", parts, 3, parts.Length - 3);
                     MemoryManager.Remember("topic", topicToRemember, userName);
                     return $"Got it, {userName}. I’ll remember that you’re interested in {topicToRemember}.";
                 }
                 else
                 {
-                    return $"Please specify the topic you want me to remember, {userName}. For example: 'remember my topic phishing'.";
+                    return $"Please specify the topic you want me to remember, {userName}. For example: 'I like phishing'.";
                 }
             }
 
-            if (input.Contains("what do i like"))
+            if (input.Contains("what do i like") || input.Contains("my favorite topic"))
             {
                 string topic = MemoryManager.Recall("topic", userName);
                 return topic != null
