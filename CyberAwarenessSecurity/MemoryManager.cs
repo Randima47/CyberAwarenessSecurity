@@ -59,20 +59,26 @@ namespace CyberAwarenessSecurity
                     : $"I don’t recall a {key} yet, {userName}. Tell me if you’d like me to remember it.";
             }
 
-            // Retrieve all stored memory as a summary
-            public static string RecallAll(string userName)
+            // Retrieve information by key
+            public static string Recall(string key, string userName)
             {
-                if (memory.Count == 0)
-                    return $"I don’t have anything stored yet, {userName}. Tell me what you’d like me to remember.";
+                if (string.IsNullOrWhiteSpace(key))
+                    return $"I need a specific detail to recall, {userName}. Try asking 'What’s my topic?'";
 
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"Here’s what I remember about you, {userName}:");
-                foreach (var kvp in memory)
+                if (memory.ContainsKey(key))
                 {
-                    sb.AppendLine($"- {kvp.Key}: {kvp.Value}");
+                    string value = memory[key];
+                    // Auto-attach a tip when recalling topics
+                    if (key == "topic")
+                    {
+                        return $"{userName}, you told me your {key} is {value}.\nTip: " + GetRandomTip(value);
+                    }
+                    return $"{userName}, you told me your {key} is {value}.";
                 }
-                return sb.ToString();
+
+                return $"I don’t recall a {key} yet, {userName}. Tell me if you’d like me to remember it.";
             }
+
 
             // Forget a specific key
             public static string Forget(string key, string userName)
