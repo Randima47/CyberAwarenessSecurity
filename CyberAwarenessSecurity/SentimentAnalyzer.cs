@@ -4,41 +4,75 @@ using System.Text;
 
 namespace CyberAwarenessSecurity
 {
+    public class SentimentResult
+    {
+        public string Response { get; set; }
+        public string Topic { get; set; }
+    }
+
     public static class SentimentAnalyzer
     {
-        public static string Analyze(string input, string userName)
+        public static SentimentResult Analyze(string input, string userName)
         {
             if (string.IsNullOrWhiteSpace(input))
-                return $"I didn’t catch that, {userName}. Try telling me how you feel — worried, curious, or even excited.";
+                return new SentimentResult
+                {
+                    Response = $"I didn’t catch that, {userName}. Try telling me how you feel — worried, curious, or even excited.",
+                    Topic = null
+                };
 
             input = input.ToLower();
 
-            if (input.Contains("worried") || input.Contains("scared") || input.Contains("anxious"))
-                return $"It’s completely understandable to feel that way, {userName}. Scammers can be very convincing. Let me share a phishing tip to help you stay safe.";
+            // Emotion detection
+            string emotion = null;
+            if (input.Contains("worried") || input.Contains("scared") || input.Contains("anxious")) emotion = "worried";
+            else if (input.Contains("frustrated") || input.Contains("angry") || input.Contains("upset")) emotion = "frustrated";
+            else if (input.Contains("curious") || input.Contains("interested")) emotion = "curious";
+            else if (input.Contains("confused") || input.Contains("unsure")) emotion = "confused";
+            else if (input.Contains("excited") || input.Contains("happy")) emotion = "excited";
+            else if (input.Contains("overwhelmed") || input.Contains("stressed")) emotion = "overwhelmed";
+            else if (input.Contains("bored")) emotion = "bored";
+            else if (input.Contains("motivated") || input.Contains("driven")) emotion = "motivated";
 
-            if (input.Contains("frustrated") || input.Contains("angry") || input.Contains("upset"))
-                return $"I hear your frustration, {userName}. Cybersecurity can feel overwhelming, but small steps like using strong passwords make a big difference. Here’s a password tip to guide you.";
+            // Context detection
+            string context = null;
+            if (input.Contains("login") || input.Contains("password")) context = "password";
+            else if (input.Contains("vpn")) context = "vpn";
+            else if (input.Contains("browse") || input.Contains("web")) context = "safe browsing";
+            else if (input.Contains("malware") || input.Contains("virus")) context = "malware";
+            else if (input.Contains("firewall")) context = "firewall";
+            else if (input.Contains("scam") || input.Contains("phishing")) context = "phishing";
+            else if (input.Contains("identity")) context = "identity theft";
 
-            if (input.Contains("curious") || input.Contains("interested"))
-                return $"Curiosity is great, {userName}! Exploring cybersecurity topics helps you stay ahead of attackers. Let’s start with safe browsing.";
+            // Decision engine: force user into system’s learning path
+            string topic = context ?? emotion switch
+            {
+                "worried" => "phishing",
+                "frustrated" => "password",
+                "curious" => "safe browsing",
+                "confused" => "malware",
+                "excited" => "vpn",
+                "overwhelmed" => "firewall",
+                "bored" => "scam",
+                "motivated" => "identity theft",
+                _ => "phishing"
+            };
 
-            if (input.Contains("confused") || input.Contains("unsure"))
-                return $"It’s okay to feel confused, {userName}. Cybersecurity has many layers, but I’ll break it down step by step. Here’s a simple malware tip to get clarity.";
+            string response = emotion switch
+            {
+                "worried" => $"It’s completely understandable to feel that way, {userName}. Scammers can be very convincing.",
+                "frustrated" => $"I hear your frustration, {userName}. Cybersecurity can feel overwhelming, but small steps like using strong passwords make a big difference.",
+                "curious" => $"Curiosity is great, {userName}! Exploring cybersecurity topics helps you stay ahead of attackers.",
+                "confused" => $"It’s okay to feel confused, {userName}. Cybersecurity has many layers, but I’ll break it down step by step.",
+                "excited" => $"I love your energy, {userName}! Staying positive makes learning easier.",
+                "overwhelmed" => $"I know it can feel overwhelming, {userName}. Cyber threats are everywhere, but focusing on one step at a time helps.",
+                "bored" => $"Feeling bored, {userName}? Let’s spice things up with a quick awareness tip.",
+                "motivated" => $"Love that motivation, {userName}! Let’s put it to use by learning about identity theft prevention.",
+                _ => $"Thanks for sharing that, {userName}. Let’s keep building your awareness."
+            };
 
-            if (input.Contains("excited") || input.Contains("happy"))
-                return $"I love your energy, {userName}! Staying positive makes learning easier. Let’s channel that excitement into a quick VPN tip.";
-
-            if (input.Contains("overwhelmed") || input.Contains("stressed"))
-                return $"I know it can feel overwhelming, {userName}. Cyber threats are everywhere, but focusing on one step at a time helps. Let’s begin with firewall basics.";
-
-            if (input.Contains("bored"))
-                return $"Feeling bored, {userName}? Let’s spice things up with a quick scam awareness tip, it might surprise you how creative attackers can be.";
-
-            if (input.Contains("motivated") || input.Contains("driven"))
-                return $"Love that motivation, {userName}! Let’s put it to use by learning about identity theft prevention.";
-
-            // No sentiment detected
-            return null;
+            return new SentimentResult { Response = response, Topic = topic };
         }
     }
 }
+
