@@ -18,7 +18,7 @@ namespace CyberAwarenessSecurity
                 return new SentimentResult
                 {
                     Response = $"I didn’t catch that, {userName}. Try telling me how you feel — worried, curious, or even excited.",
-                    Topic = null
+                    Topic = "phishing" // safe fallback
                 };
 
             input = input.ToLower();
@@ -44,7 +44,7 @@ namespace CyberAwarenessSecurity
             else if (input.Contains("scam") || input.Contains("phishing")) context = "phishing";
             else if (input.Contains("identity")) context = "identity theft";
 
-            // Decision engine: force user into system’s learning path
+            // Decision engine
             string topic = context ?? emotion switch
             {
                 "worried" => "phishing",
@@ -75,4 +75,5 @@ namespace CyberAwarenessSecurity
         }
     }
 }
+
 

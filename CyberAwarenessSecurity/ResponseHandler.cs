@@ -60,19 +60,11 @@ namespace CyberAwarenessSecurity
             var sentimentResult = SentimentAnalyzer.Analyze(input, userName);
             if (sentimentResult != null)
             {
-                // Use the topic returned by SentimentAnalyzer, fallback to phishing if none
                 string topic = string.IsNullOrEmpty(sentimentResult.Topic) ? "phishing" : sentimentResult.Topic;
-
-                // Store last topic for follow-ups
                 lastTopic = topic;
-
-                // Automatically remember the topic in MemoryManager
                 MemoryManager.Remember("topic", topic, userName);
-
-                // Return the sentiment response plus a contextual tip
                 return sentimentResult.Response + "\nTip: " + GetRandomTip(topic);
             }
-
 
             // 2. Personality responses
             if (input.Contains("how are you"))
@@ -125,8 +117,8 @@ namespace CyberAwarenessSecurity
 
                 if (!string.IsNullOrEmpty(topicToRemember))
                 {
-                    MemoryManager.Remember("topic", topicToRemember, userName);
-                    return $"Got it, {userName}. I’ll remember that you’re interested in {topicToRemember}.";
+                    lastTopic = topicToRemember;
+                    return MemoryManager.Remember("topic", topicToRemember, userName);
                 }
                 else
                 {
@@ -136,12 +128,8 @@ namespace CyberAwarenessSecurity
 
             if (input.Contains("what do i like") || input.Contains("my favorite topic"))
             {
-                string topic = MemoryManager.Recall("topic", userName);
-                return topic != null
-                    ? $"You mentioned {topic} earlier, {userName}. Let’s dive deeper into that."
-                    : $"I don’t recall a topic yet, {userName}. Tell me what you’re interested in.";
+                return MemoryManager.Recall("topic", userName);
             }
-
 
             // 6. Conversation flow
             if (input.Contains("tell me more") || input.Contains("give me another tip") || input.Contains("explain more"))
@@ -160,7 +148,7 @@ namespace CyberAwarenessSecurity
             return $"I’m not sure I understand, {userName}. Can you try rephrasing?";
         }
 
-        private static string GetRandomTip(string topic)
+        public static string GetRandomTip(string topic)
         {
             if (randomResponses.ContainsKey(topic))
             {

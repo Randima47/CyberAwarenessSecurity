@@ -3,8 +3,6 @@ using System.Text;
 
 namespace CyberAwarenessSecurity
 {
-    namespace CyberAwarenessSecurity
-    {
         public static class MemoryManager
         {
             // Dictionary to store user details or interests
@@ -48,18 +46,7 @@ namespace CyberAwarenessSecurity
                 return $"Got it, {userName}. I’ll remember you’re interested in {topicToRemember}.";
             }
 
-            // Retrieve information by key
-            public static string Recall(string key, string userName)
-            {
-                if (string.IsNullOrWhiteSpace(key))
-                    return $"I need a specific detail to recall, {userName}. Try asking 'What’s my topic?'";
-
-                return memory.ContainsKey(key)
-                    ? $"{userName}, you told me your {key} is {memory[key]}."
-                    : $"I don’t recall a {key} yet, {userName}. Tell me if you’d like me to remember it.";
-            }
-
-            // Retrieve information by key
+            // Retrieve information by key (with tip for topics)
             public static string Recall(string key, string userName)
             {
                 if (string.IsNullOrWhiteSpace(key))
@@ -68,17 +55,15 @@ namespace CyberAwarenessSecurity
                 if (memory.ContainsKey(key))
                 {
                     string value = memory[key];
-                    // Auto-attach a tip when recalling topics
                     if (key == "topic")
                     {
-                        return $"{userName}, you told me your {key} is {value}.\nTip: " + GetRandomTip(value);
+                        return $"{userName}, you told me your {key} is {value}.\nTip: " + ResponseHandler.GetRandomTip(value);
                     }
                     return $"{userName}, you told me your {key} is {value}.";
                 }
 
                 return $"I don’t recall a {key} yet, {userName}. Tell me if you’d like me to remember it.";
             }
-
 
             // Forget a specific key
             public static string Forget(string key, string userName)
@@ -99,4 +84,4 @@ namespace CyberAwarenessSecurity
             }
         }
     }
-}
+
