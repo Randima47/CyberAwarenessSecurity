@@ -57,9 +57,22 @@ namespace CyberAwarenessSecurity
             input = input.ToLower();
 
             // 1. Sentiment detection
-            string sentimentResponse = SentimentAnalyzer.Analyze(input, userName);
-            if (sentimentResponse != null)
-                return sentimentResponse + "\nTip: " + GetRandomTip("phishing");
+            var sentimentResult = SentimentAnalyzer.Analyze(input, userName);
+            if (sentimentResult != null)
+            {
+                // Use the topic returned by SentimentAnalyzer, fallback to phishing if none
+                string topic = string.IsNullOrEmpty(sentimentResult.Topic) ? "phishing" : sentimentResult.Topic;
+
+                // Store last topic for follow-ups
+                lastTopic = topic;
+
+                // Automatically remember the topic in MemoryManager
+                MemoryManager.Remember("topic", topic, userName);
+
+                // Return the sentiment response plus a contextual tip
+                return sentimentResult.Response + "\nTip: " + GetRandomTip(topic);
+            }
+
 
             // 2. Personality responses
             if (input.Contains("how are you"))
