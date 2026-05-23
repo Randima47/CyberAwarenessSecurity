@@ -52,6 +52,27 @@ namespace CyberAwarenessSecurity
             UserInput.Clear();
         }
 
+        private void FunFactButton_Click(object sender, RoutedEventArgs e)
+        {
+            string fact = FunFacts.GetRandomFact(userName);
+            AddBotMessage(fact);
+        }
+
+        private void GlossaryButton_Click(object sender, RoutedEventArgs e)
+        {
+            string input = UserInput.Text.Trim();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                AddBotMessage(GlossaryManager.ShowAllTerms(userName));
+                return;
+            }
+
+            string definition = GlossaryManager.GetDefinition(input, userName);
+            AddBotMessage(definition);
+
+            UserInput.Clear();
+        }
+
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             ChatDisplay.Document.Blocks.Clear();
