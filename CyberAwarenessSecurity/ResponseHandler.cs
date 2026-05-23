@@ -91,19 +91,32 @@ namespace CyberAwarenessSecurity
                     return kvp.Value.Replace("Tip:", $"Tip for you, {userName}:");
                 }
             }
-
+            
             // 5. Memory & recall
-            if (input.Contains("remember my topic"))
+            if (input.StartsWith("remember my topic"))
             {
-                MemoryManager.Remember("topic", "privacy", userName);
-                return $"Got it, {userName}. I’ll remember that you’re interested in privacy.";
+                
+                string[] parts = input.Split(' ');
+                if (parts.Length > 3)
+                {
+                    string topicToRemember = string.Join(" ", parts, 3, parts.Length - 3);
+                    MemoryManager.Remember("topic", topicToRemember, userName);
+                    return $"Got it, {userName}. I’ll remember that you’re interested in {topicToRemember}.";
+                }
+                else
+                {
+                    return $"Please specify the topic you want me to remember, {userName}. For example: 'remember my topic phishing'.";
+                }
             }
+
             if (input.Contains("what do i like"))
             {
                 string topic = MemoryManager.Recall("topic", userName);
-                return topic != null ? $"You mentioned {topic} earlier, {userName}. Let’s dive deeper into that."
-                                     : $"I don’t recall a topic yet, {userName}. Tell me what you’re interested in.";
+                return topic != null
+                    ? $"You mentioned {topic} earlier, {userName}. Let’s dive deeper into that."
+                    : $"I don’t recall a topic yet, {userName}. Tell me what you’re interested in.";
             }
+
 
             // 6. Conversation flow
             if (input.Contains("tell me more") || input.Contains("give me another tip") || input.Contains("explain more"))
