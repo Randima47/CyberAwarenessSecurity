@@ -26,9 +26,10 @@ namespace CyberAwarenessSecurity
             if (e.Key == Key.Enter)
             {
                 AskButton_Click(sender, e);
-                e.Handled = true; 
+                e.Handled = true;
             }
         }
+
         private void AskButton_Click(object sender, RoutedEventArgs e)
         {
             string input = UserInput.Text.Trim();
@@ -101,6 +102,9 @@ namespace CyberAwarenessSecurity
                 Margin = new Thickness(0, 5, 0, 5)
             };
             ChatDisplay.Document.Blocks.Add(p);
+
+            // Auto-scroll
+            ChatDisplay.ScrollToEnd();
         }
 
         private void AddBotMessage(string text)
@@ -111,6 +115,9 @@ namespace CyberAwarenessSecurity
                 Margin = new Thickness(0, 5, 0, 5)
             };
             ChatDisplay.Document.Blocks.Add(p);
+
+            // Auto-scroll
+            ChatDisplay.ScrollToEnd();
         }
     }
 }
