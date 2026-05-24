@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace CyberAwarenessSecurity
 {
@@ -81,7 +82,7 @@ namespace CyberAwarenessSecurity
             // 4. Awareness topics
             foreach (var kvp in randomResponses)
             {
-                if (input.Contains(kvp.Key))
+                if (Regex.IsMatch(input, $@"\b{Regex.Escape(kvp.Key)}s?\b"))
                 {
                     lastTopic = kvp.Key;
                     return $"{Capitalize(kvp.Key)} awareness, {userName}:\nTip: {GetRandomTip(kvp.Key)}";
@@ -90,12 +91,13 @@ namespace CyberAwarenessSecurity
 
             foreach (var kvp in staticResponses)
             {
-                if (input.Contains(kvp.Key))
+                if (Regex.IsMatch(input, $@"\b{Regex.Escape(kvp.Key)}s?\b"))
                 {
                     lastTopic = kvp.Key;
                     return kvp.Value.Replace("Tip:", $"Tip for you, {userName}:");
                 }
             }
+
 
             // 5. Memory & recall
             if (input.StartsWith("remember my topic") ||
