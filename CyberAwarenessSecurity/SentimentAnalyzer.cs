@@ -19,10 +19,14 @@ namespace CyberAwarenessSecurity
                 return new SentimentResult
                 {
                     Response = $"I didn’t catch that, {userName}. Try telling me how you feel — worried, curious, or even excited.",
-                    Topic = "phishing" // safe fallback
+                    Topic = "phishing"
                 };
 
             input = input.ToLower();
+
+            // Skip sentiment if user is asking for a definition
+            if (Regex.IsMatch(input, @"\b(define|tell me about|what is|explain)\b"))
+                return null;
 
             // Emotion detection
             string emotion = null;
@@ -35,36 +39,21 @@ namespace CyberAwarenessSecurity
             else if (input.Contains("bored")) emotion = "bored";
             else if (input.Contains("motivated") || input.Contains("driven")) emotion = "motivated";
 
-            // Context detection
+            // Context detection (regex plural-safe)
             string context = null;
-
-            if (Regex.IsMatch(input, @"\b(login|passwords?)\b"))
-                context = "password";
-            else if (Regex.IsMatch(input, @"\bvpn(s)?\b"))
-                context = "vpn";
-            else if (Regex.IsMatch(input, @"\b(browse|web)\b"))
-                context = "safe browsing";
-            else if (Regex.IsMatch(input, @"\b(malware|viruses?)\b"))
-                context = "malware";
-            else if (Regex.IsMatch(input, @"\bfirewalls?\b"))
-                context = "firewall";
-            else if (Regex.IsMatch(input, @"\b(scams?|phishing)\b"))
-                context = "phishing";
-            else if (Regex.IsMatch(input, @"\bidentity\b"))
-                context = "identity theft";
-            else if (Regex.IsMatch(input, @"\bsocial\s+engineerings?\b"))
-                context = "social engineering";
-            else if (Regex.IsMatch(input, @"\bransomwares?\b"))
-                context = "ransomware";
-            else if (Regex.IsMatch(input, @"\bantiviruses?\b"))
-                context = "antivirus";
-            else if (Regex.IsMatch(input, @"\bprivac(y|ies)\b"))
-                context = "privacy";
-            else if (Regex.IsMatch(input, @"\bsocial\s+medias?\b"))
-                context = "social media";
-            else if (Regex.IsMatch(input, @"\bcyberbully(ing|ings)?\b"))
-                context = "cyberbullying";
-
+            if (Regex.IsMatch(input, @"\b(login|passwords?)\b")) context = "password";
+            else if (Regex.IsMatch(input, @"\bvpn(s)?\b")) context = "vpn";
+            else if (Regex.IsMatch(input, @"\b(browse|web)\b")) context = "safe browsing";
+            else if (Regex.IsMatch(input, @"\b(malware|viruses?)\b")) context = "malware";
+            else if (Regex.IsMatch(input, @"\bfirewalls?\b")) context = "firewall";
+            else if (Regex.IsMatch(input, @"\b(scams?|phishing)\b")) context = "phishing";
+            else if (Regex.IsMatch(input, @"\bidentity\b")) context = "identity theft";
+            else if (Regex.IsMatch(input, @"\bsocial\s+engineerings?\b")) context = "social engineering";
+            else if (Regex.IsMatch(input, @"\bransomwares?\b")) context = "ransomware";
+            else if (Regex.IsMatch(input, @"\bantiviruses?\b")) context = "antivirus";
+            else if (Regex.IsMatch(input, @"\bprivac(y|ies)\b")) context = "privacy";
+            else if (Regex.IsMatch(input, @"\bsocial\s+medias?\b")) context = "social media";
+            else if (Regex.IsMatch(input, @"\bcyberbully(ing|ings)?\b")) context = "cyberbullying";
 
             // Decision engine
             string topic = context ?? emotion switch
@@ -97,5 +86,3 @@ namespace CyberAwarenessSecurity
         }
     }
 }
-
-
