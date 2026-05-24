@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CyberAwarenessSecurity
 {
@@ -36,13 +37,34 @@ namespace CyberAwarenessSecurity
 
             // Context detection
             string context = null;
-            if (input.Contains("login") || input.Contains("password")) context = "password";
-            else if (input.Contains("vpn")) context = "vpn";
-            else if (input.Contains("browse") || input.Contains("web")) context = "safe browsing";
-            else if (input.Contains("malware") || input.Contains("virus")) context = "malware";
-            else if (input.Contains("firewall")) context = "firewall";
-            else if (input.Contains("scam") || input.Contains("phishing")) context = "phishing";
-            else if (input.Contains("identity")) context = "identity theft";
+
+            if (Regex.IsMatch(input, @"\b(login|passwords?)\b"))
+                context = "password";
+            else if (Regex.IsMatch(input, @"\bvpn(s)?\b"))
+                context = "vpn";
+            else if (Regex.IsMatch(input, @"\b(browse|web)\b"))
+                context = "safe browsing";
+            else if (Regex.IsMatch(input, @"\b(malware|viruses?)\b"))
+                context = "malware";
+            else if (Regex.IsMatch(input, @"\bfirewalls?\b"))
+                context = "firewall";
+            else if (Regex.IsMatch(input, @"\b(scams?|phishing)\b"))
+                context = "phishing";
+            else if (Regex.IsMatch(input, @"\bidentity\b"))
+                context = "identity theft";
+            else if (Regex.IsMatch(input, @"\bsocial\s+engineerings?\b"))
+                context = "social engineering";
+            else if (Regex.IsMatch(input, @"\bransomwares?\b"))
+                context = "ransomware";
+            else if (Regex.IsMatch(input, @"\bantiviruses?\b"))
+                context = "antivirus";
+            else if (Regex.IsMatch(input, @"\bprivac(y|ies)\b"))
+                context = "privacy";
+            else if (Regex.IsMatch(input, @"\bsocial\s+medias?\b"))
+                context = "social media";
+            else if (Regex.IsMatch(input, @"\bcyberbully(ing|ings)?\b"))
+                context = "cyberbullying";
+
 
             // Decision engine
             string topic = context ?? emotion switch
