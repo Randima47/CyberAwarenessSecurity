@@ -24,8 +24,8 @@ namespace CyberAwarenessSecurity
 
             input = input.ToLower();
 
-            // Skip sentiment if user is asking for a definition
-            if (Regex.IsMatch(input, @"\b(define|tell me about|what is|explain)\b"))
+            // Skip sentiment if user is asking for a definition/help/topics
+            if (Regex.IsMatch(input, @"\b(define|tell me about|what is|explain|help|learn|topics)\b"))
                 return null;
 
             // Emotion detection
@@ -39,7 +39,7 @@ namespace CyberAwarenessSecurity
             else if (input.Contains("bored")) emotion = "bored";
             else if (input.Contains("motivated") || input.Contains("driven")) emotion = "motivated";
 
-            // Context detection (regex plural-safe)
+            // Context detection
             string context = null;
             if (Regex.IsMatch(input, @"\b(login|passwords?)\b")) context = "password";
             else if (Regex.IsMatch(input, @"\bvpn(s)?\b")) context = "vpn";
@@ -55,7 +55,6 @@ namespace CyberAwarenessSecurity
             else if (Regex.IsMatch(input, @"\bsocial\s+medias?\b")) context = "social media";
             else if (Regex.IsMatch(input, @"\bcyberbully(ing|ings)?\b")) context = "cyberbullying";
 
-            // Decision engine
             string topic = context ?? emotion switch
             {
                 "worried" => "phishing",
@@ -86,3 +85,5 @@ namespace CyberAwarenessSecurity
         }
     }
 }
+
+

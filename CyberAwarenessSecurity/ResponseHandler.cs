@@ -50,6 +50,7 @@ namespace CyberAwarenessSecurity
             }}
         };
 
+
         public static string GetResponse(string input, string userName)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -57,29 +58,7 @@ namespace CyberAwarenessSecurity
 
             input = input.ToLower();
 
-            // 1. Sentiment detection
-            var sentimentResult = SentimentAnalyzer.Analyze(input, userName);
-            if (sentimentResult != null)
-            {
-                string topic = string.IsNullOrEmpty(sentimentResult.Topic) ? "phishing" : sentimentResult.Topic;
-                lastTopic = topic;
-                MemoryManager.Remember("topic", topic, userName);
-                return sentimentResult.Response + "\nTip: " + GetRandomTip(topic);
-            }
-
-            // 2. Personality responses
-            if (input.Contains("how are you"))
-                return $"I’m really good, thanks for asking, {userName}! How are you feeling today?";
-            if (input.Contains("your name"))
-                return $"I’m....., whatever you want to call me, {userName}. What would you like to call me?";
-            if (input.Contains("who created"))
-                return $"Randima Ndivho built me for a project to raise cybersecurity awareness. What do you think inspired him to build me, {userName}?";
-
-            // 3. Help / Topics
-            if (input.Contains("help") || input.Contains("topics") || input.Contains("learn"))
-                return $"I can teach you about these cybersecurity topics, {userName}:\n- Phishing\n- Password safety\n- Safe browsing\n- Malware\n- Firewall\n- Social engineering\n- Ransomware\n- Two-factor authentication (2FA)\n- Antivirus\n- VPN\n- Scam\n- Privacy\n- Identity theft\n- Social media\n- Cyberbullying\n\nWhich one would you like to learn about first?";
-
-            // 4. Awareness topics
+            // 1. Awareness topics first
             foreach (var kvp in randomResponses)
             {
                 if (Regex.IsMatch(input, $@"\b{Regex.Escape(kvp.Key)}s?\b"))
@@ -98,6 +77,27 @@ namespace CyberAwarenessSecurity
                 }
             }
 
+            // 2. Sentiment detection
+            var sentimentResult = SentimentAnalyzer.Analyze(input, userName);
+            if (sentimentResult != null)
+            {
+                string topic = string.IsNullOrEmpty(sentimentResult.Topic) ? "phishing" : sentimentResult.Topic;
+                lastTopic = topic;
+                MemoryManager.Remember("topic", topic, userName);
+                return sentimentResult.Response + "\nTip: " + GetRandomTip(topic);
+            }
+
+            // 3. Personality responses
+            if (input.Contains("how are you"))
+                return $"I’m really good, thanks for asking, {userName}! How are you feeling today?";
+            if (input.Contains("your name"))
+                return $"I’m....., whatever you want to call me, {userName}. What would you like to call me?";
+            if (input.Contains("who created"))
+                return $"Randima Ndivho built me for a project to raise cybersecurity awareness. What do you think inspired him to build me, {userName}?";
+
+            // 4. Help / Topics
+            if (input.Contains("help") || input.Contains("topics") || input.Contains("learn"))
+                return $"I can teach you about these cybersecurity topics, {userName}:\n- Phishing\n- Password safety\n- Safe browsing\n- Malware\n- Firewall\n- Social engineering\n- Ransomware\n- Two-factor authentication (2FA)\n- Antivirus\n- VPN\n- Scam\n- Privacy\n- Identity theft\n- Social media\n- Cyberbullying\n\nWhich one would you like to learn about first?";
 
             // 5. Memory & recall
             if (input.StartsWith("remember my topic") ||
@@ -133,7 +133,7 @@ namespace CyberAwarenessSecurity
                 return MemoryManager.Recall("topic", userName);
             }
 
-            // 6. Conversation flow
+            // 6. Conversation flow (single block)
             if (input.Contains("tell me more") || input.Contains("give me another tip") || input.Contains("explain more"))
             {
                 if (!string.IsNullOrEmpty(lastTopic))
@@ -167,4 +167,3 @@ namespace CyberAwarenessSecurity
         }
     }
 }
-
