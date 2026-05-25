@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Input;
+using System.Media; 
 
 namespace CyberAwarenessSecurity
 {
@@ -15,6 +16,19 @@ namespace CyberAwarenessSecurity
         public MainWindow()
         {
             InitializeComponent();
+
+            // Play greeting audio on startup
+            try
+            {
+                SoundPlayer player = new SoundPlayer("AWARENESSBOT.wav"); 
+                player.Load();
+                player.Play();
+            }
+            catch (Exception ex)
+            {
+                AddBotMessage($"(Audio greeting failed: {ex.Message})");
+            }
+
             AddBotMessage("Welcome to CyberSecurity AwarenessBot! Please enter your name to begin.");
 
             // Bind Enter key to AskButton_Click
@@ -121,3 +135,4 @@ namespace CyberAwarenessSecurity
         }
     }
 }
+
