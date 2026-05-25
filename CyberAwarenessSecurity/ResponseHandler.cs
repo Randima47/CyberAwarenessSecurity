@@ -20,7 +20,6 @@ namespace CyberAwarenessSecurity
           { "identity theft", "Identity theft happens when attackers steal your personal info. Tip: Monitor your accounts and use alerts for suspicious activity." },
           { "social media", "Social media can expose personal data. Tip: Limit what you share and adjust privacy settings." },
           { "cyberbullying", "Cyberbullying harms people online. Tip: Report abusive behavior and avoid engaging with bullies." },
-
           { "encryption", "Encryption is the process of converting data into a coded format to prevent unauthorized access. Tip: Use strong encryption methods to protect sensitive files and communications." },
           { "decryption", "Decryption is the process of converting encrypted data back into readable information. Tip: Only trusted users should have access to decryption keys." },
           { "spyware", "Spyware is malware that secretly collects information about a user without their consent. Tip: Avoid downloading software from untrusted websites." },
@@ -307,22 +306,31 @@ namespace CyberAwarenessSecurity
 
             input = input.ToLower();
 
-            // 1. Awareness topics first
-            foreach (var kvp in randomResponses)
-            {
-                if (Regex.IsMatch(input, $@"\b{Regex.Escape(kvp.Key)}s?\b"))
-                {
-                    lastTopic = kvp.Key;
-                    return $"{Capitalize(kvp.Key)} awareness, {userName}:\nTip: {GetRandomTip(kvp.Key)}";
-                }
-            }
-
+            // 1. Awareness definitions first
             foreach (var kvp in staticResponses)
             {
                 if (Regex.IsMatch(input, $@"\b{Regex.Escape(kvp.Key)}s?\b"))
                 {
                     lastTopic = kvp.Key;
                     return kvp.Value.Replace("Tip:", $"Tip for you, {userName}:");
+                }
+            }
+
+            // 2. Awareness tips (randomResponses) only if phrasing matches
+            if (input.Contains("tell me more") || input.Contains("give me another tip") || input.Contains("explain more"))
+            {
+                if (!string.IsNullOrEmpty(lastTopic))
+                    return $"Another {lastTopic} tip, {userName}: {GetRandomTip(lastTopic)}";
+                else
+                    return $"Let’s start fresh, {userName}. Ask me about phishing, passwords, or privacy.";
+            }
+
+            foreach (var kvp in randomResponses)
+            {
+                if (Regex.IsMatch(input, $@"\b{Regex.Escape(kvp.Key)}s?\b"))
+                {
+                    lastTopic = kvp.Key;
+                    return $"{Capitalize(kvp.Key)} awareness, {userName}:\nTip: {GetRandomTip(kvp.Key)}";
                 }
             }
 
