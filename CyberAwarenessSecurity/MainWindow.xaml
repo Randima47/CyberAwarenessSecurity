@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="CyberSecurity AwarenessBot"
-        Height="650" Width="900"
+        Height="989" Width="900"
         WindowStartupLocation="CenterScreen"
         Background="#0D0D0D">
 
@@ -20,6 +20,8 @@
             <!-- Task Assistant -->
             <RowDefinition Height="Auto"/>
             <!-- Quiz Panel -->
+            <RowDefinition Height="Auto"/>
+            <!-- Activity Log -->
         </Grid.RowDefinitions>
 
         <!-- Banner / Logo -->
@@ -154,13 +156,14 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
+
         <!-- Activity Log Panel -->
         <GroupBox Grid.Row="6" Header="Activity Log"
-          Foreground="Cyan" FontWeight="Bold" Margin="0,15,0,0"
-          BorderBrush="Cyan" BorderThickness="2">
+                  Foreground="Cyan" FontWeight="Bold" Margin="0,15,0,0"
+                  BorderBrush="Cyan" BorderThickness="2">
             <StackPanel Orientation="Vertical" Margin="10">
                 <ListView Name="ActivityList" Height="150" Background="#1A1A1A" Foreground="White"
-                  BorderBrush="Cyan" BorderThickness="1">
+                          BorderBrush="Cyan" BorderThickness="1">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Time" Width="150" DisplayMemberBinding="{Binding Timestamp}" />
@@ -169,11 +172,10 @@
                     </ListView.View>
                 </ListView>
                 <Button Content="Clear Log" Width="100" Height="30" Margin="0,10,0,0"
-                Background="Red" Foreground="White" FontWeight="Bold"
-                HorizontalAlignment="Center"
-                Click="ClearLog_Click"/>
+                        Background="Red" Foreground="White" FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        Click="ClearLog_Click"/>
             </StackPanel>
         </GroupBox>
-
     </Grid>
 </Window>
