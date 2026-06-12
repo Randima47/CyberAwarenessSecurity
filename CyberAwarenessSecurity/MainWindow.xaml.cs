@@ -281,6 +281,7 @@ namespace CyberAwarenessSecurity
                     FontWeight = FontWeights.Bold
                 };
 
+
                 optionButton.Click += (s, e) =>
                 {
                     string feedback = QuizManager.SubmitAnswer(optionIndex);
@@ -290,5 +291,24 @@ namespace CyberAwarenessSecurity
                 QuizOptionsPanel.Children.Add(optionButton);
             }
         }
+
+            // -------------------------------
+            // Activity Log Event Handlers
+            // -------------------------------
+
+       private void LogAction(string action)
+        {
+            ActivityLog.Add(action);
+            ActivityList.ItemsSource = null;
+            ActivityList.ItemsSource = ActivityLog.GetEntries();
+        }
+
+        private void ClearLog_Click(object sender, RoutedEventArgs e)
+        {
+            ActivityLog.Clear();
+            ActivityList.ItemsSource = null;
+        }
+
     }
 }
+
