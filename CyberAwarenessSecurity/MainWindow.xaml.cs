@@ -1,10 +1,11 @@
 ﻿using CyberAwarenessSecurity;
 using System;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Input;
 using System.Media;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace CyberAwarenessSecurity
 {
@@ -214,6 +215,20 @@ namespace CyberAwarenessSecurity
             }
         }
 
+        private void RefreshTaskList()
+        {
+            try
+            {
+                var tasks = TaskManager.GetTasks();
+                TaskList.ItemsSource = null;
+                TaskList.ItemsSource = tasks;
+            }
+            catch (Exception ex)
+            {
+                AddBotMessage($"Error loading tasks: {ex.Message}");
+            }
+        }
+
         // -------------------------------
         // Quiz Panel Event Handlers
         // -------------------------------
@@ -246,7 +261,7 @@ namespace CyberAwarenessSecurity
             if (question == null)
             {
                 QuizQuestionText.Text = "Quiz finished!";
-                QuizFeedback.Text = $"Your final score: {QuizManager.SubmitAnswer(-1)}";
+                QuizFeedback.Text = $"Quiz complete! Your score: {QuizManager.GetScore()}";
                 return;
             }
 
@@ -273,21 +288,6 @@ namespace CyberAwarenessSecurity
                 };
 
                 QuizOptionsPanel.Children.Add(optionButton);
-            }
-        }
-
-
-        private void RefreshTaskList()
-        {
-            try
-            {
-                var tasks = TaskManager.GetTasks();
-                TaskList.ItemsSource = null;
-                TaskList.ItemsSource = tasks;
-            }
-            catch (Exception ex)
-            {
-                AddBotMessage($"Error loading tasks: {ex.Message}");
             }
         }
     }
