@@ -131,5 +131,11 @@ namespace CyberAwarenessSecurity
             currentIndex = 0;
             score = 0;
         }
+
+        // Added helper method for MainWindow.cs
+        public static string GetScore()
+        {
+            return $"{score}/{questions.Count}";
+        }
     }
 }
