@@ -214,6 +214,69 @@ namespace CyberAwarenessSecurity
             }
         }
 
+        // -------------------------------
+        // Quiz Panel Event Handlers
+        // -------------------------------
+
+        private void StartQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            QuizManager.ResetQuiz();
+            QuizFeedback.Text = "";
+            LoadNextQuestion();
+        }
+
+        private void NextQuestion_Click(object sender, RoutedEventArgs e)
+        {
+            LoadNextQuestion();
+        }
+
+        private void ResetQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            QuizManager.ResetQuiz();
+            QuizQuestionText.Text = "Press 'Start Quiz' to begin.";
+            QuizOptionsPanel.Children.Clear();
+            QuizFeedback.Text = "";
+        }
+
+        private void LoadNextQuestion()
+        {
+            var question = QuizManager.GetNextQuestion();
+            QuizOptionsPanel.Children.Clear();
+
+            if (question == null)
+            {
+                QuizQuestionText.Text = "Quiz finished!";
+                QuizFeedback.Text = $"Your final score: {QuizManager.SubmitAnswer(-1)}";
+                return;
+            }
+
+            QuizQuestionText.Text = question.Question;
+
+            for (int i = 0; i < question.Options.Count; i++)
+            {
+                int optionIndex = i;
+                Button optionButton = new Button
+                {
+                    Content = question.Options[i],
+                    Width = 300,
+                    Height = 30,
+                    Margin = new Thickness(0, 5, 0, 5),
+                    Background = Brushes.DarkSlateGray,
+                    Foreground = Brushes.White,
+                    FontWeight = FontWeights.Bold
+                };
+
+                optionButton.Click += (s, e) =>
+                {
+                    string feedback = QuizManager.SubmitAnswer(optionIndex);
+                    QuizFeedback.Text = feedback;
+                };
+
+                QuizOptionsPanel.Children.Add(optionButton);
+            }
+        }
+
+
         private void RefreshTaskList()
         {
             try
