@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Input;
-using System.Media; 
+using System.Media;
 
 namespace CyberAwarenessSecurity
 {
@@ -20,7 +20,7 @@ namespace CyberAwarenessSecurity
             // Play greeting audio on startup
             try
             {
-                SoundPlayer player = new SoundPlayer("AWARENESSBOT.wav"); 
+                SoundPlayer player = new SoundPlayer("AWARENESSBOT.wav");
                 player.Load();
                 player.Play();
             }
@@ -33,6 +33,9 @@ namespace CyberAwarenessSecurity
 
             // Bind Enter key to AskButton_Click
             UserInput.KeyDown += UserInput_KeyDown;
+
+            // Load tasks on startup
+            RefreshTaskList();
         }
 
         private void UserInput_KeyDown(object sender, KeyEventArgs e)
@@ -133,6 +136,96 @@ namespace CyberAwarenessSecurity
             // Auto-scroll
             ChatDisplay.ScrollToEnd();
         }
+
+        // -------------------------------
+        // Task Panel Event Handlers
+        // -------------------------------
+
+        private void AddTask_Click(object sender, RoutedEventArgs e)
+        {
+            string title = TaskTitle.Text.Trim();
+            string description = TaskDescription.Text.Trim();
+            DateTime? reminder = TaskReminder.SelectedDate;
+
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description))
+            {
+                AddBotMessage("Please enter both a title and description for the task.");
+                return;
+            }
+
+            try
+            {
+                TaskManager.AddTask(title, description, reminder);
+                AddBotMessage($"Task '{title}' added successfully.");
+                RefreshTaskList();
+                TaskTitle.Clear();
+                TaskDescription.Clear();
+                TaskReminder.SelectedDate = null;
+            }
+            catch (Exception ex)
+            {
+                AddBotMessage($"Error adding task: {ex.Message}");
+            }
+        }
+
+        private void CompleteTask_Click(object sender, RoutedEventArgs e)
+        {
+            if (TaskList.SelectedItem == null)
+            {
+                AddBotMessage("Please select a task to mark as complete.");
+                return;
+            }
+
+            var selectedTask = (dynamic)TaskList.SelectedItem;
+            int id = selectedTask.Id;
+
+            try
+            {
+                TaskManager.CompleteTask(id);
+                AddBotMessage($"Task '{selectedTask.Title}' marked as completed.");
+                RefreshTaskList();
+            }
+            catch (Exception ex)
+            {
+                AddBotMessage($"Error completing task: {ex.Message}");
+            }
+        }
+
+        private void DeleteTask_Click(object sender, RoutedEventArgs e)
+        {
+            if (TaskList.SelectedItem == null)
+            {
+                AddBotMessage("Please select a task to delete.");
+                return;
+            }
+
+            var selectedTask = (dynamic)TaskList.SelectedItem;
+            int id = selectedTask.Id;
+
+            try
+            {
+                TaskManager.DeleteTask(id);
+                AddBotMessage($"Task '{selectedTask.Title}' deleted.");
+                RefreshTaskList();
+            }
+            catch (Exception ex)
+            {
+                AddBotMessage($"Error deleting task: {ex.Message}");
+            }
+        }
+
+        private void RefreshTaskList()
+        {
+            try
+            {
+                var tasks = TaskManager.GetTasks();
+                TaskList.ItemsSource = null;
+                TaskList.ItemsSource = tasks;
+            }
+            catch (Exception ex)
+            {
+                AddBotMessage($"Error loading tasks: {ex.Message}");
+            }
+        }
     }
 }
-
