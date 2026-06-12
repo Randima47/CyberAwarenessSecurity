@@ -64,11 +64,13 @@ namespace CyberAwarenessSecurity
                 AddUserMessage(input);
                 AddBotMessage($"Nice to meet you, {userName}! Ask me about cybersecurity topics like phishing, passwords, or privacy.");
                 UserInput.Clear();
+                LogAction($"User set name: {userName}");
                 return;
             }
 
             // Show user message
             AddUserMessage(input);
+            LogAction($"User asked: {input}");
 
             // Get bot response
             string response = ResponseHandler.GetResponse(input, userName);
@@ -87,6 +89,7 @@ namespace CyberAwarenessSecurity
         {
             string fact = FunFacts.GetRandomFact(userName);
             AddBotMessage(fact);
+            LogAction("Displayed fun fact.");
         }
 
         private void GlossaryButton_Click(object sender, RoutedEventArgs e)
@@ -95,11 +98,13 @@ namespace CyberAwarenessSecurity
             if (string.IsNullOrWhiteSpace(input))
             {
                 AddBotMessage(GlossaryManager.ShowAllTerms(userName));
+                LogAction("Displayed full glossary.");
                 return;
             }
 
             string definition = GlossaryManager.GetDefinition(input, userName);
             AddBotMessage(definition);
+            LogAction($"Looked up glossary term: {input}");
 
             UserInput.Clear();
         }
@@ -110,6 +115,7 @@ namespace CyberAwarenessSecurity
             AddBotMessage(MemoryManager.Clear(userName));
             userName = "Guest";
             lastUserInput = "";
+            LogAction("Chat cleared and memory reset.");
         }
 
         private void AddUserMessage(string text)
@@ -162,6 +168,8 @@ namespace CyberAwarenessSecurity
                 TaskTitle.Clear();
                 TaskDescription.Clear();
                 TaskReminder.SelectedDate = null;
+
+                LogAction($"Task added: {title}");
             }
             catch (Exception ex)
             {
@@ -185,6 +193,8 @@ namespace CyberAwarenessSecurity
                 TaskManager.CompleteTask(id);
                 AddBotMessage($"Task '{selectedTask.Title}' marked as completed.");
                 RefreshTaskList();
+
+                LogAction($"Task completed: {selectedTask.Title}");
             }
             catch (Exception ex)
             {
@@ -208,6 +218,8 @@ namespace CyberAwarenessSecurity
                 TaskManager.DeleteTask(id);
                 AddBotMessage($"Task '{selectedTask.Title}' deleted.");
                 RefreshTaskList();
+
+                LogAction($"Task deleted: {selectedTask.Title}");
             }
             catch (Exception ex)
             {
@@ -238,11 +250,13 @@ namespace CyberAwarenessSecurity
             QuizManager.ResetQuiz();
             QuizFeedback.Text = "";
             LoadNextQuestion();
+            LogAction("Quiz started.");
         }
 
         private void NextQuestion_Click(object sender, RoutedEventArgs e)
         {
             LoadNextQuestion();
+            LogAction("Moved to next quiz question.");
         }
 
         private void ResetQuiz_Click(object sender, RoutedEventArgs e)
@@ -251,6 +265,7 @@ namespace CyberAwarenessSecurity
             QuizQuestionText.Text = "Press 'Start Quiz' to begin.";
             QuizOptionsPanel.Children.Clear();
             QuizFeedback.Text = "";
+            LogAction("Quiz reset.");
         }
 
         private void LoadNextQuestion()
@@ -262,6 +277,7 @@ namespace CyberAwarenessSecurity
             {
                 QuizQuestionText.Text = "Quiz finished!";
                 QuizFeedback.Text = $"Quiz complete! Your score: {QuizManager.GetScore()}";
+                LogAction("Quiz finished.");
                 return;
             }
 
@@ -281,22 +297,22 @@ namespace CyberAwarenessSecurity
                     FontWeight = FontWeights.Bold
                 };
 
-
                 optionButton.Click += (s, e) =>
                 {
                     string feedback = QuizManager.SubmitAnswer(optionIndex);
                     QuizFeedback.Text = feedback;
+                    LogAction($"Answered quiz question: {question.Question}");
                 };
 
                 QuizOptionsPanel.Children.Add(optionButton);
             }
         }
 
-            // -------------------------------
-            // Activity Log Event Handlers
-            // -------------------------------
+        // -------------------------------
+        // Activity Log Event Handlers
+        // -------------------------------
 
-       private void LogAction(string action)
+        private void LogAction(string action)
         {
             ActivityLog.Add(action);
             ActivityList.ItemsSource = null;
@@ -307,8 +323,7 @@ namespace CyberAwarenessSecurity
         {
             ActivityLog.Clear();
             ActivityList.ItemsSource = null;
+            LogAction("Activity log cleared.");
         }
-
     }
 }
-
