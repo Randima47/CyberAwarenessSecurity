@@ -9,10 +9,17 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Banner -->
             <RowDefinition Height="Auto"/>
+            <!-- Subtitle -->
             <RowDefinition Height="*"/>
+            <!-- Chat Display -->
             <RowDefinition Height="Auto"/>
+            <!-- Input + Buttons -->
             <RowDefinition Height="Auto"/>
+            <!-- Task Assistant -->
+            <RowDefinition Height="Auto"/>
+            <!-- Quiz Panel -->
         </Grid.RowDefinitions>
 
         <!-- Banner / Logo -->
@@ -58,44 +65,14 @@
                      BorderThickness="1"
                      Margin="0,0,10,0"/>
 
-            <!-- Ask Button -->
-            <Button Content="Ask"
-                    Width="80"
-                    Height="30"
-                    Background="Cyan"
-                    Foreground="Black"
-                    FontWeight="Bold"
-                    Margin="0,0,10,0"
-                    Click="AskButton_Click"/>
-
-            <!-- Fun Fact Button -->
-            <Button Content="Fun Fact"
-                    Width="90"
-                    Height="30"
-                    Background="Orange"
-                    Foreground="Black"
-                    FontWeight="Bold"
-                    Margin="0,0,10,0"
-                    Click="FunFactButton_Click"/>
-
-            <!-- Glossary Button -->
-            <Button Content="Glossary"
-                    Width="90"
-                    Height="30"
-                    Background="Purple"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    Margin="0,0,10,0"
-                    Click="GlossaryButton_Click"/>
-
-            <!-- Clear Chat Button -->
-            <Button Content="Clear"
-                    Width="80"
-                    Height="30"
-                    Background="Red"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    Click="ClearButton_Click"/>
+            <Button Content="Ask" Width="80" Height="30" Background="Cyan" Foreground="Black"
+                    FontWeight="Bold" Margin="0,0,10,0" Click="AskButton_Click"/>
+            <Button Content="Fun Fact" Width="90" Height="30" Background="Orange" Foreground="Black"
+                    FontWeight="Bold" Margin="0,0,10,0" Click="FunFactButton_Click"/>
+            <Button Content="Glossary" Width="90" Height="30" Background="Purple" Foreground="White"
+                    FontWeight="Bold" Margin="0,0,10,0" Click="GlossaryButton_Click"/>
+            <Button Content="Clear" Width="80" Height="30" Background="Red" Foreground="White"
+                    FontWeight="Bold" Click="ClearButton_Click"/>
         </StackPanel>
 
         <!-- Task Assistant Panel -->
@@ -104,7 +81,6 @@
                   BorderBrush="Cyan" BorderThickness="2">
             <StackPanel Orientation="Vertical" Margin="10">
 
-                <!-- Task List -->
                 <ListView Name="TaskList" Height="150" Background="#1A1A1A" Foreground="White"
                           BorderBrush="Cyan" BorderThickness="1" Margin="0,0,0,10">
                     <ListView.View>
@@ -118,7 +94,6 @@
                     </ListView.View>
                 </ListView>
 
-                <!-- Task Input Controls -->
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <TextBox Name="TaskTitle" Width="150" Height="25" Margin="0,0,10,0"
                              Background="#262626" Foreground="White" BorderBrush="Cyan"
@@ -129,7 +104,6 @@
                     <DatePicker Name="TaskReminder" Width="150" Height="25" Margin="0,0,10,0"/>
                 </StackPanel>
 
-                <!-- Action Buttons -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="Add Task" Width="100" Height="30" Margin="0,0,10,0"
                             Background="Green" Foreground="White" FontWeight="Bold"
@@ -140,6 +114,43 @@
                     <Button Content="Delete Task" Width="100" Height="30"
                             Background="Red" Foreground="White" FontWeight="Bold"
                             Click="DeleteTask_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Quiz Panel -->
+        <GroupBox Grid.Row="5" Header="Cybersecurity Quiz"
+                  Foreground="Cyan" FontWeight="Bold" Margin="0,15,0,0"
+                  BorderBrush="Cyan" BorderThickness="2">
+            <StackPanel Orientation="Vertical" Margin="10">
+
+                <TextBlock Name="QuizQuestionText"
+                           Text="Press 'Start Quiz' to begin."
+                           Foreground="White"
+                           FontSize="16"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,10"/>
+
+                <StackPanel Name="QuizOptionsPanel" Orientation="Vertical" Margin="0,0,0,10">
+                    <!-- Buttons will be dynamically generated in code-behind -->
+                </StackPanel>
+
+                <TextBlock Name="QuizFeedback"
+                           Foreground="Orange"
+                           FontSize="14"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Start Quiz" Width="100" Height="30" Margin="0,0,10,0"
+                            Background="Green" Foreground="White" FontWeight="Bold"
+                            Click="StartQuiz_Click"/>
+                    <Button Content="Next Question" Width="120" Height="30" Margin="0,0,10,0"
+                            Background="Cyan" Foreground="Black" FontWeight="Bold"
+                            Click="NextQuestion_Click"/>
+                    <Button Content="Reset Quiz" Width="100" Height="30"
+                            Background="Red" Foreground="White" FontWeight="Bold"
+                            Click="ResetQuiz_Click"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
