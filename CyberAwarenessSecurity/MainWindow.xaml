@@ -6,6 +6,40 @@
         WindowStartupLocation="CenterScreen"
         Background="#0D0D0D">
 
+    <!-- Global Styles -->
+    <Window.Resources>
+        <!-- Base Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#00FFFF"/>
+            <!-- Cyan default -->
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Special Button Styles -->
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#FF3B3B"/>
+            <!-- Red -->
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#32CD32"/>
+            <!-- Green -->
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#FFA500"/>
+            <!-- Orange -->
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -38,7 +72,7 @@
                    FontStyle="Italic"/>
 
         <!-- TabControl -->
-        <TabControl Grid.Row="2" Background="#1A1A1A" Foreground="White">
+        <TabControl Grid.Row="2" Background="#1A1A1A" Foreground="White" BorderBrush="Cyan" BorderThickness="1">
 
             <!-- Chat Tab -->
             <TabItem Header="Chat">
@@ -49,21 +83,23 @@
                     </Grid.RowDefinitions>
 
                     <!-- Chat Display -->
-                    <RichTextBox Name="ChatDisplay"
-                                 Foreground="White"
-                                 Background="#1A1A1A"
-                                 IsReadOnly="True"
-                                 VerticalScrollBarVisibility="Auto"
-                                 FontSize="14"/>
+                    <Border BorderBrush="Cyan" BorderThickness="2" CornerRadius="8" Padding="5" Margin="0,0,0,10">
+                        <RichTextBox Name="ChatDisplay"
+                                     Foreground="White"
+                                     Background="#1A1A1A"
+                                     IsReadOnly="True"
+                                     VerticalScrollBarVisibility="Auto"
+                                     FontSize="14"/>
+                    </Border>
 
                     <!-- Input + Buttons -->
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                        <TextBox Name="UserInput" Width="400" Height="30" FontSize="14"
+                        <TextBox Name="UserInput" Width="400" Height="35" FontSize="14"
                                  Background="#262626" Foreground="White" BorderBrush="Cyan" Margin="0,0,10,0"/>
-                        <Button Content="Ask" Width="80" Height="30" Click="AskButton_Click"/>
-                        <Button Content="Fun Fact" Width="90" Height="30" Click="FunFactButton_Click"/>
-                        <Button Content="Glossary" Width="90" Height="30" Click="GlossaryButton_Click"/>
-                        <Button Content="Clear" Width="80" Height="30" Click="ClearButton_Click"/>
+                        <Button Content="Ask" Width="90" Height="35" Click="AskButton_Click"/>
+                        <Button Content="Fun Fact" Width="100" Height="35" Style="{StaticResource AccentButton}" Click="FunFactButton_Click"/>
+                        <Button Content="Glossary" Width="100" Height="35" Background="Purple" Foreground="White" Click="GlossaryButton_Click"/>
+                        <Button Content="Clear" Width="90" Height="35" Style="{StaticResource DangerButton}" Click="ClearButton_Click"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -71,33 +107,21 @@
             <!-- Tasks Tab -->
             <TabItem Header="Tasks">
                 <StackPanel Orientation="Vertical" Margin="10">
-                    <ListView Name="TaskList" Height="150" Background="#1A1A1A" Foreground="White"
-                              BorderBrush="Cyan" BorderThickness="1" Margin="0,0,0,10">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="ID" Width="40" DisplayMemberBinding="{Binding Id}" />
-                                <GridViewColumn Header="Title" Width="150" DisplayMemberBinding="{Binding Title}" />
-                                <GridViewColumn Header="Description" Width="250" DisplayMemberBinding="{Binding Description}" />
-                                <GridViewColumn Header="Reminder" Width="120" DisplayMemberBinding="{Binding ReminderDate}" />
-                                <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <TextBox Name="TaskTitle" Width="150" Height="25" Margin="0,0,10,0"
+                    <ListView Name="TaskList" Height="200" Background="#1A1A1A" Foreground="White"
+                              BorderBrush="Cyan" BorderThickness="1" Margin="0,0,0,15"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <TextBox Name="TaskTitle" Width="150" Height="30" Margin="0,0,10,0"
                                  Background="#262626" Foreground="White" BorderBrush="Cyan"
                                  ToolTip="Enter task title"/>
-                        <TextBox Name="TaskDescription" Width="250" Height="25" Margin="0,0,10,0"
+                        <TextBox Name="TaskDescription" Width="250" Height="30" Margin="0,0,10,0"
                                  Background="#262626" Foreground="White" BorderBrush="Cyan"
                                  ToolTip="Enter task description"/>
-                        <DatePicker Name="TaskReminder" Width="150" Height="25" Margin="0,0,10,0"/>
+                        <DatePicker Name="TaskReminder" Width="150" Height="30" Margin="0,0,10,0"/>
                     </StackPanel>
-
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="Add Task" Width="100" Height="30" Margin="0,0,10,0" Click="AddTask_Click"/>
-                        <Button Content="Complete Task" Width="120" Height="30" Margin="0,0,10,0" Click="CompleteTask_Click"/>
-                        <Button Content="Delete Task" Width="100" Height="30" Click="DeleteTask_Click"/>
+                        <Button Content="Add Task" Width="110" Height="35" Style="{StaticResource SuccessButton}" Click="AddTask_Click"/>
+                        <Button Content="Complete Task" Width="130" Height="35" Style="{StaticResource AccentButton}" Click="CompleteTask_Click"/>
+                        <Button Content="Delete Task" Width="110" Height="35" Style="{StaticResource DangerButton}" Click="DeleteTask_Click"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
@@ -110,17 +134,17 @@
                                Foreground="White"
                                FontSize="16"
                                TextWrapping="Wrap"
-                               Margin="0,0,0,10"/>
-                    <StackPanel Name="QuizOptionsPanel" Orientation="Vertical" Margin="0,0,0,10"/>
+                               Margin="0,0,0,15"/>
+                    <StackPanel Name="QuizOptionsPanel" Orientation="Vertical" Margin="0,0,0,15"/>
                     <TextBlock Name="QuizFeedback"
                                Foreground="Orange"
                                FontSize="14"
                                TextWrapping="Wrap"
-                               Margin="0,0,0,10"/>
+                               Margin="0,0,0,15"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="Start Quiz" Width="100" Height="30" Margin="0,0,10,0" Click="StartQuiz_Click"/>
-                        <Button Content="Next Question" Width="120" Height="30" Margin="0,0,10,0" Click="NextQuestion_Click"/>
-                        <Button Content="Reset Quiz" Width="100" Height="30" Click="ResetQuiz_Click"/>
+                        <Button Content="Start Quiz" Width="110" Height="35" Style="{StaticResource SuccessButton}" Click="StartQuiz_Click"/>
+                        <Button Content="Next Question" Width="130" Height="35" Click="NextQuestion_Click"/>
+                        <Button Content="Reset Quiz" Width="110" Height="35" Style="{StaticResource DangerButton}" Click="ResetQuiz_Click"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
@@ -128,16 +152,9 @@
             <!-- Activity Log Tab -->
             <TabItem Header="Activity Log">
                 <StackPanel Orientation="Vertical" Margin="10">
-                    <ListView Name="ActivityList" Height="150" Background="#1A1A1A" Foreground="White"
-                              BorderBrush="Cyan" BorderThickness="1">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Time" Width="150" DisplayMemberBinding="{Binding Timestamp}" />
-                                <GridViewColumn Header="Action" Width="400" DisplayMemberBinding="{Binding Action}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <Button Content="Clear Log" Width="100" Height="30" Margin="0,10,0,0"
+                    <ListView Name="ActivityList" Height="200" Background="#1A1A1A" Foreground="White"
+                              BorderBrush="Cyan" BorderThickness="1" Margin="0,0,0,15"/>
+                    <Button Content="Clear Log" Width="110" Height="35" Style="{StaticResource DangerButton}"
                             HorizontalAlignment="Center" Click="ClearLog_Click"/>
                 </StackPanel>
             </TabItem>
