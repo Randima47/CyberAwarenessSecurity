@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="CyberSecurity AwarenessBot"
-        Height="989" Width="900"
+        Height="800" Width="900"
         WindowStartupLocation="CenterScreen"
         Background="#0D0D0D">
 
@@ -13,18 +13,10 @@
             <RowDefinition Height="Auto"/>
             <!-- Subtitle -->
             <RowDefinition Height="*"/>
-            <!-- Chat Display -->
-            <RowDefinition Height="Auto"/>
-            <!-- Input + Buttons -->
-            <RowDefinition Height="Auto"/>
-            <!-- Task Assistant -->
-            <RowDefinition Height="Auto"/>
-            <!-- Quiz Panel -->
-            <RowDefinition Height="Auto"/>
-            <!-- Activity Log -->
+            <!-- Tabs -->
         </Grid.RowDefinitions>
 
-        <!-- Banner / Logo -->
+        <!-- Banner -->
         <TextBlock Text="CyberSecurity AwarenessBot"
                    Foreground="Red"
                    FontSize="28"
@@ -45,137 +37,110 @@
                    Margin="0,5,0,15"
                    FontStyle="Italic"/>
 
-        <!-- Chat Display -->
-        <Border Grid.Row="2" BorderBrush="Cyan" BorderThickness="2" CornerRadius="8" Padding="5">
-            <RichTextBox Name="ChatDisplay"
-                         Foreground="White"
-                         Background="#1A1A1A"
-                         IsReadOnly="True"
-                         VerticalScrollBarVisibility="Auto"
-                         FontSize="14"/>
-        </Border>
+        <!-- TabControl -->
+        <TabControl Grid.Row="2" Background="#1A1A1A" Foreground="White">
 
-        <!-- Input + Buttons -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-            <TextBox Name="UserInput"
-                     Width="400"
-                     Height="30"
-                     FontSize="14"
-                     Background="#262626"
-                     Foreground="White"
-                     BorderBrush="Cyan"
-                     BorderThickness="1"
-                     Margin="0,0,10,0"/>
+            <!-- Chat Tab -->
+            <TabItem Header="Chat">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-            <Button Content="Ask" Width="80" Height="30" Background="Cyan" Foreground="Black"
-                    FontWeight="Bold" Margin="0,0,10,0" Click="AskButton_Click"/>
-            <Button Content="Fun Fact" Width="90" Height="30" Background="Orange" Foreground="Black"
-                    FontWeight="Bold" Margin="0,0,10,0" Click="FunFactButton_Click"/>
-            <Button Content="Glossary" Width="90" Height="30" Background="Purple" Foreground="White"
-                    FontWeight="Bold" Margin="0,0,10,0" Click="GlossaryButton_Click"/>
-            <Button Content="Clear" Width="80" Height="30" Background="Red" Foreground="White"
-                    FontWeight="Bold" Click="ClearButton_Click"/>
-        </StackPanel>
+                    <!-- Chat Display -->
+                    <RichTextBox Name="ChatDisplay"
+                                 Foreground="White"
+                                 Background="#1A1A1A"
+                                 IsReadOnly="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 FontSize="14"/>
 
-        <!-- Task Assistant Panel -->
-        <GroupBox Grid.Row="4" Header="Cybersecurity Tasks"
-                  Foreground="Cyan" FontWeight="Bold" Margin="0,15,0,0"
-                  BorderBrush="Cyan" BorderThickness="2">
-            <StackPanel Orientation="Vertical" Margin="10">
+                    <!-- Input + Buttons -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                        <TextBox Name="UserInput" Width="400" Height="30" FontSize="14"
+                                 Background="#262626" Foreground="White" BorderBrush="Cyan" Margin="0,0,10,0"/>
+                        <Button Content="Ask" Width="80" Height="30" Click="AskButton_Click"/>
+                        <Button Content="Fun Fact" Width="90" Height="30" Click="FunFactButton_Click"/>
+                        <Button Content="Glossary" Width="90" Height="30" Click="GlossaryButton_Click"/>
+                        <Button Content="Clear" Width="80" Height="30" Click="ClearButton_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
 
-                <ListView Name="TaskList" Height="150" Background="#1A1A1A" Foreground="White"
-                          BorderBrush="Cyan" BorderThickness="1" Margin="0,0,0,10">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="ID" Width="40" DisplayMemberBinding="{Binding Id}" />
-                            <GridViewColumn Header="Title" Width="150" DisplayMemberBinding="{Binding Title}" />
-                            <GridViewColumn Header="Description" Width="250" DisplayMemberBinding="{Binding Description}" />
-                            <GridViewColumn Header="Reminder" Width="120" DisplayMemberBinding="{Binding ReminderDate}" />
-                            <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+            <!-- Tasks Tab -->
+            <TabItem Header="Tasks">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <ListView Name="TaskList" Height="150" Background="#1A1A1A" Foreground="White"
+                              BorderBrush="Cyan" BorderThickness="1" Margin="0,0,0,10">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID" Width="40" DisplayMemberBinding="{Binding Id}" />
+                                <GridViewColumn Header="Title" Width="150" DisplayMemberBinding="{Binding Title}" />
+                                <GridViewColumn Header="Description" Width="250" DisplayMemberBinding="{Binding Description}" />
+                                <GridViewColumn Header="Reminder" Width="120" DisplayMemberBinding="{Binding ReminderDate}" />
+                                <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                    <TextBox Name="TaskTitle" Width="150" Height="25" Margin="0,0,10,0"
-                             Background="#262626" Foreground="White" BorderBrush="Cyan"
-                             ToolTip="Enter task title"/>
-                    <TextBox Name="TaskDescription" Width="250" Height="25" Margin="0,0,10,0"
-                             Background="#262626" Foreground="White" BorderBrush="Cyan"
-                             ToolTip="Enter task description"/>
-                    <DatePicker Name="TaskReminder" Width="150" Height="25" Margin="0,0,10,0"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBox Name="TaskTitle" Width="150" Height="25" Margin="0,0,10,0"
+                                 Background="#262626" Foreground="White" BorderBrush="Cyan"
+                                 ToolTip="Enter task title"/>
+                        <TextBox Name="TaskDescription" Width="250" Height="25" Margin="0,0,10,0"
+                                 Background="#262626" Foreground="White" BorderBrush="Cyan"
+                                 ToolTip="Enter task description"/>
+                        <DatePicker Name="TaskReminder" Width="150" Height="25" Margin="0,0,10,0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Add Task" Width="100" Height="30" Margin="0,0,10,0" Click="AddTask_Click"/>
+                        <Button Content="Complete Task" Width="120" Height="30" Margin="0,0,10,0" Click="CompleteTask_Click"/>
+                        <Button Content="Delete Task" Width="100" Height="30" Click="DeleteTask_Click"/>
+                    </StackPanel>
                 </StackPanel>
+            </TabItem>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Add Task" Width="100" Height="30" Margin="0,0,10,0"
-                            Background="Green" Foreground="White" FontWeight="Bold"
-                            Click="AddTask_Click"/>
-                    <Button Content="Complete Task" Width="120" Height="30" Margin="0,0,10,0"
-                            Background="Orange" Foreground="Black" FontWeight="Bold"
-                            Click="CompleteTask_Click"/>
-                    <Button Content="Delete Task" Width="100" Height="30"
-                            Background="Red" Foreground="White" FontWeight="Bold"
-                            Click="DeleteTask_Click"/>
+            <!-- Quiz Tab -->
+            <TabItem Header="Quiz">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <TextBlock Name="QuizQuestionText"
+                               Text="Press 'Start Quiz' to begin."
+                               Foreground="White"
+                               FontSize="16"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,10"/>
+                    <StackPanel Name="QuizOptionsPanel" Orientation="Vertical" Margin="0,0,0,10"/>
+                    <TextBlock Name="QuizFeedback"
+                               Foreground="Orange"
+                               FontSize="14"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,10"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Start Quiz" Width="100" Height="30" Margin="0,0,10,0" Click="StartQuiz_Click"/>
+                        <Button Content="Next Question" Width="120" Height="30" Margin="0,0,10,0" Click="NextQuestion_Click"/>
+                        <Button Content="Reset Quiz" Width="100" Height="30" Click="ResetQuiz_Click"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </GroupBox>
+            </TabItem>
 
-        <!-- Quiz Panel -->
-        <GroupBox Grid.Row="5" Header="Cybersecurity Quiz"
-                  Foreground="Cyan" FontWeight="Bold" Margin="0,15,0,0"
-                  BorderBrush="Cyan" BorderThickness="2">
-            <StackPanel Orientation="Vertical" Margin="10">
-
-                <TextBlock Name="QuizQuestionText"
-                           Text="Press 'Start Quiz' to begin."
-                           Foreground="White"
-                           FontSize="16"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,10"/>
-
-                <StackPanel Name="QuizOptionsPanel" Orientation="Vertical" Margin="0,0,0,10">
-                    <!-- Buttons will be dynamically generated in code-behind -->
+            <!-- Activity Log Tab -->
+            <TabItem Header="Activity Log">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <ListView Name="ActivityList" Height="150" Background="#1A1A1A" Foreground="White"
+                              BorderBrush="Cyan" BorderThickness="1">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Time" Width="150" DisplayMemberBinding="{Binding Timestamp}" />
+                                <GridViewColumn Header="Action" Width="400" DisplayMemberBinding="{Binding Action}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Content="Clear Log" Width="100" Height="30" Margin="0,10,0,0"
+                            HorizontalAlignment="Center" Click="ClearLog_Click"/>
                 </StackPanel>
-
-                <TextBlock Name="QuizFeedback"
-                           Foreground="Orange"
-                           FontSize="14"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,10"/>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Start Quiz" Width="100" Height="30" Margin="0,0,10,0"
-                            Background="Green" Foreground="White" FontWeight="Bold"
-                            Click="StartQuiz_Click"/>
-                    <Button Content="Next Question" Width="120" Height="30" Margin="0,0,10,0"
-                            Background="Cyan" Foreground="Black" FontWeight="Bold"
-                            Click="NextQuestion_Click"/>
-                    <Button Content="Reset Quiz" Width="100" Height="30"
-                            Background="Red" Foreground="White" FontWeight="Bold"
-                            Click="ResetQuiz_Click"/>
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
-
-        <!-- Activity Log Panel -->
-        <GroupBox Grid.Row="6" Header="Activity Log"
-                  Foreground="Cyan" FontWeight="Bold" Margin="0,15,0,0"
-                  BorderBrush="Cyan" BorderThickness="2">
-            <StackPanel Orientation="Vertical" Margin="10">
-                <ListView Name="ActivityList" Height="150" Background="#1A1A1A" Foreground="White"
-                          BorderBrush="Cyan" BorderThickness="1">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Time" Width="150" DisplayMemberBinding="{Binding Timestamp}" />
-                            <GridViewColumn Header="Action" Width="400" DisplayMemberBinding="{Binding Action}" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <Button Content="Clear Log" Width="100" Height="30" Margin="0,10,0,0"
-                        Background="Red" Foreground="White" FontWeight="Bold"
-                        HorizontalAlignment="Center"
-                        Click="ClearLog_Click"/>
-            </StackPanel>
-        </GroupBox>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
