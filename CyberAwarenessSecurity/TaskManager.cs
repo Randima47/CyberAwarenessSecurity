@@ -1,76 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
 
 namespace CyberAwarenessSecurity
 {
     public static class TaskManager
     {
-        private static string connectionString = "server=localhost;user=root;password=yourpassword;database=CyberTasks;";
+        // Fake in-memory storage
+        private static List<TaskItem> tasks = new List<TaskItem>();
+        private static int nextId = 1;
 
+        // Add task
         public static void AddTask(string title, string description, DateTime? reminderDate)
         {
-            using (var conn = new MySqlConnection(connectionString))
+            tasks.Add(new TaskItem
             {
-                conn.Open();
-                string query = "INSERT INTO Tasks (Title, Description, ReminderDate, IsCompleted) VALUES (@title, @desc, @reminder, false)";
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@title", title);
-                    cmd.Parameters.AddWithValue("@desc", description);
-                    cmd.Parameters.AddWithValue("@reminder", reminderDate.HasValue ? reminderDate.Value : (object)DBNull.Value);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                Id = nextId++,
+                Title = title,
+                Description = description,
+                ReminderDate = reminderDate,
+                IsCompleted = false
+            });
         }
 
+        // Get tasks
         public static List<string> GetTasks()
         {
-            var tasks = new List<string>();
-            using (var conn = new MySqlConnection(connectionString))
+            var result = new List<string>();
+            foreach (var t in tasks)
             {
-                conn.Open();
-                string query = "SELECT Id, Title, Description, ReminderDate, IsCompleted FROM Tasks";
-                using (var cmd = new MySqlCommand(query, conn))
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        string reminder = reader["ReminderDate"] == DBNull.Value ? "No reminder" : reader["ReminderDate"].ToString();
-                        string status = (bool)reader["IsCompleted"] ? "Completed" : "Pending";
-                        tasks.Add($"{reader["Id"]}: {reader["Title"]} - {reader["Description"]} | {reminder} | {status}");
-                    }
-                }
+                string reminder = t.ReminderDate.HasValue ? t.ReminderDate.Value.ToString("yyyy-MM-dd HH:mm") : "No reminder";
+                string status = t.IsCompleted ? "Completed" : "Pending";
+                result.Add($"{t.Id}: {t.Title} - {t.Description} | {reminder} | {status}");
             }
-            return tasks;
+            return result;
         }
 
+        // Complete task
         public static void CompleteTask(int id)
         {
-            using (var conn = new MySqlConnection(connectionString))
-            {
-                conn.Open();
-                string query = "UPDATE Tasks SET IsCompleted = true WHERE Id = @id";
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            var task = tasks.Find(t => t.Id == id);
+            if (task != null) task.IsCompleted = true;
         }
 
+        // Delete task
         public static void DeleteTask(int id)
         {
-            using (var conn = new MySqlConnection(connectionString))
-            {
-                conn.Open();
-                string query = "DELETE FROM Tasks WHERE Id = @id";
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            tasks.RemoveAll(t => t.Id == id);
         }
+    }
+
+    // Helper class
+    public class TaskItem
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime? ReminderDate { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }
