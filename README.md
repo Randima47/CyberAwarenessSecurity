@@ -6,19 +6,19 @@ This version focuses on structured logic, object-based design, and modular syste
 
 # Features
 
-- Audio Greeting: Plays a custom recorded .wav file on startup.
+ Audio Greeting: Plays a custom recorded .wav file on startup.
 
 * Plays a .wav file on startup
 * Creates an immersive onboarding experience for users.
 
-- Cybersecurity Awareness Chat
+Cybersecurity Awareness Chat
 
 * RichTextBox - based chat interface
 * Colour - coded responses for definitions, tips, and personality answers.
 * Personalised interaction - Remembers user’s name and favourite topics for a tailored experience.
 * Memory recall - Stores and recalls user’s favourite topics for deeper learning.
 
-- Quiz System
+Quiz System
 
 Interactive cybersecurity quiz engine featuring:
 
@@ -39,7 +39,7 @@ Topics include:
 * HTTPS and web safety
 * And many more!
 
-- Task Manager System
+Task Manager System
 
 A lightweight productivity module integrated into the app:
 
@@ -53,7 +53,7 @@ Built using:
 * TaskManager (logic layer)
 * TaskItem (data model)
 
-- Activity Log System
+Activity Log System
 
 Tracks user interactions across all application
 
@@ -61,18 +61,18 @@ Tracks user interactions across all application
 * Timestamped entries
 * Live UI Updates via centralized logging system
 
-- Glossary System
+Glossary System
 
 * Cybersecurity term definitions
 * On-demand lookup system
 * Educational reference support
 
-- Fun Fact System
+Fun Fact System
 
 * Random cybersecurity facts
 * Lightweight engagement feature
 
-- Expanded Cybersecurity Topics
+Expanded Cybersecurity Topics
 
 * Identity theft
 * Social engineering
@@ -122,7 +122,7 @@ System returns:
 * User can complete or delete tasks
 * Task state updates instantly in memory
 
-- Activity Logging Flow
+Activity Logging Flow
 
 * Every major action is recorded
 Logs include:
@@ -132,34 +132,34 @@ Logs include:
 
 # Project Structure
 
-- MainWindow.xaml / MainWindow.cs
+MainWindow.xaml / MainWindow.cs
 * WPF UI layer, event handling, quiz/task integration, logging, chat interface
-- ResponseHandler.cs
+ResponseHandler.cs
 * Core cybersecurity chatbot logic
-- QuizManager.cs
+QuizManager.cs
 * Handles quiz logic, scoring, and question progression
-- TaskManager.cs
+TaskManager.cs
 * Manages task creation, updates, and deletion
-- TaskItem.cs
+TaskItem.cs
 * Data model representing individual tasks
-- ActivityLog.cs
+ActivityLog.cs
 * Central logging system for user actions
-- MemoryManager.cs
+MemoryManager.cs
 * Stores user preferences and memory-based responses
-- SentimentAnalyzer.cs
+SentimentAnalyzer.cs
 * Detects sentiment and adjusts responses
-- FunFacts.cs
+FunFacts.cs
 * Generates random cybersecurity facts
-- GlossaryManager.cs
+GlossaryManager.cs
 * Handles cybersecurity term definitions
 
 # Requirements
 
-- .NET Framework 4.7.2 or later
+* NET Framework 4.7.2 or later
 
-- WPF environment with audio playback support
+* WPF environment with audio playback support
 
-- greeting.wav file placed in the project’s output directory (bin/Debug or bin/Release)
+* greeting.wav file placed in the project’s output directory (bin/Debug or bin/Release)
 
 # Usage
 
@@ -174,7 +174,6 @@ Logs include:
 
 # Example Interaction
 
-Ask me about cybersecurity topics like phishing, passwords, or privacy.
 Bot: Welcome to CyberAwarenessBot! Please enter your name.
 User: Randima Ndivho
 Bot: Nice to meet you, Randima Ndivho. Ask me about cybersecurity topics like phishing, passwords, or privacy.
