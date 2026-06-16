@@ -324,14 +324,17 @@ namespace CyberAwarenessSecurity
         private void LogAction(string action)
         {
             ActivityLog.Add(action);
-            ActivityList.ItemsSource = null;
+
+            // update UI immediately (like Quiz feedback)
             ActivityList.ItemsSource = ActivityLog.GetEntries();
         }
 
         private void ClearLog_Click(object sender, RoutedEventArgs e)
         {
             ActivityLog.Clear();
-            ActivityList.ItemsSource = null;
+
+            ActivityList.ItemsSource = ActivityLog.GetEntries();
+
             LogAction("Activity log cleared.");
         }
     }

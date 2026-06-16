@@ -7,14 +7,16 @@ namespace CyberAwarenessSecurity
     {
         public DateTime Timestamp { get; set; }
         public string Action { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Timestamp:HH:mm:ss} - {Action}";
+        }
     }
 
     public static class ActivityLog
     {
         private static List<ActivityEntry> entries = new List<ActivityEntry>();
-
-        //  NEW: notify UI when something changes
-        public static event Action LogUpdated;
 
         public static void Add(string action)
         {
@@ -23,9 +25,6 @@ namespace CyberAwarenessSecurity
                 Timestamp = DateTime.Now,
                 Action = action
             });
-
-            //  notify listeners
-            LogUpdated?.Invoke();
         }
 
         public static List<ActivityEntry> GetEntries()
@@ -36,7 +35,6 @@ namespace CyberAwarenessSecurity
         public static void Clear()
         {
             entries.Clear();
-            LogUpdated?.Invoke();
         }
     }
 }
