@@ -163,8 +163,10 @@ namespace CyberAwarenessSecurity
             try
             {
                 TaskManager.AddTask(title, description, reminder);
+
                 AddBotMessage($"Task '{title}' added successfully.");
                 RefreshTaskList();
+
                 TaskTitle.Clear();
                 TaskDescription.Clear();
                 TaskReminder.SelectedDate = null;
@@ -179,22 +181,23 @@ namespace CyberAwarenessSecurity
 
         private void CompleteTask_Click(object sender, RoutedEventArgs e)
         {
-            if (TaskList.SelectedItem == null)
+            var task = TaskList.SelectedItem as TaskItem;
+
+            if (task == null)
             {
                 AddBotMessage("Please select a task to mark as complete.");
                 return;
             }
 
-            var selectedTask = (dynamic)TaskList.SelectedItem;
-            int id = selectedTask.Id;
-
             try
             {
-                TaskManager.CompleteTask(id);
-                AddBotMessage($"Task '{selectedTask.Title}' marked as completed.");
+                TaskManager.CompleteTask(task.Id);
+
+                AddBotMessage($"Task '{task.Title}' marked as completed.");
+
                 RefreshTaskList();
 
-                LogAction($"Task completed: {selectedTask.Title}");
+                LogAction($"Task completed: {task.Title}");
             }
             catch (Exception ex)
             {
@@ -204,22 +207,23 @@ namespace CyberAwarenessSecurity
 
         private void DeleteTask_Click(object sender, RoutedEventArgs e)
         {
-            if (TaskList.SelectedItem == null)
+            var task = TaskList.SelectedItem as TaskItem;
+
+            if (task == null)
             {
                 AddBotMessage("Please select a task to delete.");
                 return;
             }
 
-            var selectedTask = (dynamic)TaskList.SelectedItem;
-            int id = selectedTask.Id;
-
             try
             {
-                TaskManager.DeleteTask(id);
-                AddBotMessage($"Task '{selectedTask.Title}' deleted.");
+                TaskManager.DeleteTask(task.Id);
+
+                AddBotMessage($"Task '{task.Title}' deleted.");
+
                 RefreshTaskList();
 
-                LogAction($"Task deleted: {selectedTask.Title}");
+                LogAction($"Task deleted: {task.Title}");
             }
             catch (Exception ex)
             {
@@ -231,9 +235,8 @@ namespace CyberAwarenessSecurity
         {
             try
             {
-                var tasks = TaskManager.GetTasks();
                 TaskList.ItemsSource = null;
-                TaskList.ItemsSource = tasks;
+                TaskList.ItemsSource = TaskManager.GetTasks();
             }
             catch (Exception ex)
             {
