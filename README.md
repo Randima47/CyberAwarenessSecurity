@@ -6,7 +6,7 @@ This version focuses on structured logic, object-based design, and modular syste
 
 # Features
 
- Audio Greeting: Plays a custom recorded .wav file on startup.
+ Audio Greeting
 
 * Plays a .wav file on startup
 * Creates an immersive onboarding experience for users.
