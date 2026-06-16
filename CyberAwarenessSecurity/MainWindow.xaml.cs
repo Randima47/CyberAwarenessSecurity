@@ -271,6 +271,7 @@ namespace CyberAwarenessSecurity
         private void LoadNextQuestion()
         {
             var question = QuizManager.GetNextQuestion();
+
             QuizOptionsPanel.Children.Clear();
 
             if (question == null)
@@ -283,12 +284,16 @@ namespace CyberAwarenessSecurity
 
             QuizQuestionText.Text = question.Question;
 
-            for (int i = 0; i < question.Options.Count; i++)
+            //  Freeze local reference 
+            var currentQuestion = question;
+
+            for (int i = 0; i < currentQuestion.Options.Count; i++)
             {
                 int optionIndex = i;
+
                 Button optionButton = new Button
                 {
-                    Content = question.Options[i],
+                    Content = currentQuestion.Options[i],
                     Width = 300,
                     Height = 30,
                     Margin = new Thickness(0, 5, 0, 5),
@@ -299,9 +304,13 @@ namespace CyberAwarenessSecurity
 
                 optionButton.Click += (s, e) =>
                 {
+                    // prevent double clicks causing confusion
+                    optionButton.IsEnabled = false;
+
                     string feedback = QuizManager.SubmitAnswer(optionIndex);
                     QuizFeedback.Text = feedback;
-                    LogAction($"Answered quiz question: {question.Question}");
+
+                    LogAction($"Answered: {currentQuestion.Question}");
                 };
 
                 QuizOptionsPanel.Children.Add(optionButton);
