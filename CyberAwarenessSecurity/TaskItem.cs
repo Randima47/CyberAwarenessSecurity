@@ -4,6 +4,10 @@ namespace CyberAwarenessSecurity
 {
     public class TaskItem
     {
+        public override string ToString()
+        {
+            return Title;
+        }
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
