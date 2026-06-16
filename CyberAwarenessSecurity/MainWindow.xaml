@@ -10,8 +10,7 @@
     <Window.Resources>
         <!-- Base Button Style -->
         <Style TargetType="Button">
-            <Setter Property="Background" Value="#00FFFF"/>
-            <!-- Cyan default -->
+            <Setter Property="Background" Value="#00FFFF"/> <!-- Cyan default -->
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Margin" Value="5"/>
@@ -21,33 +20,97 @@
         </Style>
 
         <!-- Special Button Styles -->
-        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+
+        <!-- Base Button Style -->
+        <Style x:Key="BaseButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="10"
+                        RenderTransformOrigin="0.5,0.5"
+                        SnapsToDevicePixels="True">
+
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Opacity" Value="0.9"/>
+                                <Setter TargetName="Border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.03" ScaleY="1.03"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Pressed -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Opacity" Value="0.75"/>
+                                <Setter TargetName="Border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.97" ScaleY="0.97"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Opacity" Value="0.4"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Danger Button -->
+        <Style x:Key="DangerButton"
+       TargetType="Button"
+       BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="#FF3B3B"/>
-            <!-- Red -->
             <Setter Property="Foreground" Value="White"/>
         </Style>
 
-        <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <!-- Success Button -->
+        <Style x:Key="SuccessButton"
+       TargetType="Button"
+       BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="#32CD32"/>
-            <!-- Green -->
             <Setter Property="Foreground" Value="White"/>
         </Style>
 
-        <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <!-- Accent Button -->
+        <Style x:Key="AccentButton"
+       TargetType="Button"
+       BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="#FFA500"/>
-            <!-- Orange -->
             <Setter Property="Foreground" Value="Black"/>
         </Style>
+
     </Window.Resources>
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <!-- Banner -->
-            <RowDefinition Height="Auto"/>
-            <!-- Subtitle -->
-            <RowDefinition Height="*"/>
-            <!-- Tabs -->
+            <RowDefinition Height="Auto"/> <!-- Banner -->
+            <RowDefinition Height="Auto"/> <!-- Subtitle -->
+            <RowDefinition Height="*"/>    <!-- Tabs -->
         </Grid.RowDefinitions>
 
         <!-- Banner -->
@@ -73,11 +136,11 @@
 
         <!-- TabControl -->
         <TabControl Grid.Row="2" Background="#1A1A1A" Foreground="White" BorderBrush="Cyan" BorderThickness="1">
-
+            
             <!-- Chat Tab -->
             <TabItem>
                 <TabItem.Header>
-                    <Border Background="#00BFFF" Padding="10,5">
+                    <Border Background="Cyan" Padding="10,5">
                         <TextBlock Text="Chat"
                                    Foreground="White"
                                    FontWeight="Bold"/>
@@ -114,7 +177,7 @@
             <!-- Tasks Tab -->
             <TabItem>
                 <TabItem.Header>
-                    <Border Background="#32CD32" Padding="10,5">
+                    <Border Background="Red" Padding="10,5">
                         <TextBlock Text="Tasks"
                                    Foreground="White"
                                    FontWeight="Bold"/>
@@ -143,7 +206,7 @@
             <!-- Quiz Tab -->
             <TabItem>
                 <TabItem.Header>
-                    <Border Background="#FFA500" Padding="10,5">
+                    <Border Background="Orange" Padding="10,5">
                         <TextBlock Text="Quiz"
                                    Foreground="White"
                                    FontWeight="Bold"/>
@@ -173,7 +236,7 @@
             <!-- Activity Log Tab -->
             <TabItem>
                 <TabItem.Header>
-                    <Border Background="#9370DB" Padding="10,5">
+                    <Border Background="Purple" Padding="10,5">
                         <TextBlock Text="Activity Log"
                                    Foreground="White"
                                    FontWeight="Bold"/>
