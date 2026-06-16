@@ -134,22 +134,31 @@ Logs include:
 
 MainWindow.xaml / MainWindow.cs
 * WPF UI layer, event handling, quiz/task integration, logging, chat interface
+
 ResponseHandler.cs
 * Core cybersecurity chatbot logic
+
 QuizManager.cs
 * Handles quiz logic, scoring, and question progression
+
 TaskManager.cs
 * Manages task creation, updates, and deletion
+
 TaskItem.cs
 * Data model representing individual tasks
+
 ActivityLog.cs
 * Central logging system for user actions
+
 MemoryManager.cs
 * Stores user preferences and memory-based responses
+
 SentimentAnalyzer.cs
 * Detects sentiment and adjusts responses
+
 FunFacts.cs
 * Generates random cybersecurity facts
+
 GlossaryManager.cs
 * Handles cybersecurity term definitions
 
