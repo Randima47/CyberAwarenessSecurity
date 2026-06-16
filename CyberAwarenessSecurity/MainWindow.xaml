@@ -75,7 +75,14 @@
         <TabControl Grid.Row="2" Background="#1A1A1A" Foreground="White" BorderBrush="Cyan" BorderThickness="1">
 
             <!-- Chat Tab -->
-            <TabItem Header="Chat">
+            <TabItem>
+                <TabItem.Header>
+                    <Border Background="#00BFFF" Padding="10,5">
+                        <TextBlock Text="Chat"
+                                   Foreground="White"
+                                   FontWeight="Bold"/>
+                    </Border>
+                </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -105,7 +112,14 @@
             </TabItem>
 
             <!-- Tasks Tab -->
-            <TabItem Header="Tasks">
+            <TabItem>
+                <TabItem.Header>
+                    <Border Background="#32CD32" Padding="10,5">
+                        <TextBlock Text="Tasks"
+                                   Foreground="White"
+                                   FontWeight="Bold"/>
+                    </Border>
+                </TabItem.Header>
                 <StackPanel Orientation="Vertical" Margin="10">
                     <ListView Name="TaskList" Height="200" Background="#1A1A1A" Foreground="White"
                               BorderBrush="Cyan" BorderThickness="1" Margin="0,0,0,15"/>
@@ -127,7 +141,14 @@
             </TabItem>
 
             <!-- Quiz Tab -->
-            <TabItem Header="Quiz">
+            <TabItem>
+                <TabItem.Header>
+                    <Border Background="#FFA500" Padding="10,5">
+                        <TextBlock Text="Quiz"
+                                   Foreground="White"
+                                   FontWeight="Bold"/>
+                    </Border>
+                </TabItem.Header>
                 <StackPanel Orientation="Vertical" Margin="10">
                     <TextBlock Name="QuizQuestionText"
                                Text="Press 'Start Quiz' to begin."
@@ -150,7 +171,14 @@
             </TabItem>
 
             <!-- Activity Log Tab -->
-            <TabItem Header="Activity Log">
+            <TabItem>
+                <TabItem.Header>
+                    <Border Background="#9370DB" Padding="10,5">
+                        <TextBlock Text="Activity Log"
+                                   Foreground="White"
+                                   FontWeight="Bold"/>
+                    </Border>
+                </TabItem.Header>
                 <StackPanel Orientation="Vertical" Margin="10">
                     <ListView Name="ActivityList" Height="200" Background="#1A1A1A" Foreground="White"
                               BorderBrush="Cyan" BorderThickness="1" Margin="0,0,0,15"/>
