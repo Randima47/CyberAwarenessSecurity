@@ -1,99 +1,151 @@
-# CyberAwarenessBot - Part 2
+# CyberAwarenessBot - Part 3
 
-CyberAwarenessBot has been upgraded from a console chatbot into a WPF GUI application designed to raise cybersecurity awareness in a professional, interactive way.
-It combines audio greetings, modern GUI design, personalised interactions, and structured responses to teach users about key cybersecurity concepts.
+CyberAwarenessBot has evolved into a multi-system WPF application that now combines cybersecurity awareness learning with an interactive quiz engine, task manager system, and activity logging.
+
+This version focuses on structured logic, object-based design, and modular system separation, moving beyond a simple chatbot into a lightweight learning and productivity platform.
 
 # Features
 
 - Audio Greeting: Plays a custom recorded .wav file on startup.
+* Plays a .wav file on startup
+* Creates an immersive onboarding experience for users.
 
-- GUI Interface: RichTextBox chat display with auto‑scroll, styled chat bubbles, and buttons for quick actions.
+- Cybersecurity Awareness Chat
+* RichTextBox - based chat interface
+* Colour - coded responses for definitions, tips, and personality answers.
+* Personalised interaction - Remembers user’s name and favourite topics for a tailored experience.
+* Memory recall - Stores and recalls user’s favourite topics for deeper learning.
 
-- Personalised Greeting: Prompts for the user’s name and uses it consistently throughout the conversation.
+- Quiz System
+Interactive cybersecurity quiz engine featuring:
 
-Interactive Chat Flow:
+* Multiple-choice questions
+* Score tracking system
+* Instant feedback per answer
+* Final score summary
+* Sequential question flow managed by QuizManager
+Topics include:
 
-Awareness definitions (green) for cybersecurity topics.
+* Malware
+* Phishing
+* Firewalls
+* Social engineering
+* Password security
+* DDoS attacks
+* HTTPS and web safety
+* And many more!
 
-- Randomised awareness tips for deeper learning.
+- Task Manager System
+A lightweight productivity module integrated into the app:
 
-- Personality answers (cyan) for casual interaction.
-Memory recall of favourite topics.
+* Add tasks with title, description, and optional reminder date
+* Mark tasks as completed
+* Delete tasks
+* Real-time task list updates
 
-- Glossary button to show definitions.
+Built using:
 
-- Fun Fact button for random cybersecurity facts.
+* TaskManager (logic layer)
+* TaskItem (data model)
 
-Expanded Cybersecurity Topics:
+- Activity Log System
+Tracks user interactions across all application
 
-- Identity theft
+* Logs all major actions ( Quiz answers, Task Upadates, Resets, etc. )
+* Timestamped entries
+* Live UI Updates via centralized logging system
 
-- Social media
+- Glossary System
 
-- Cyberbullying
+* Cybersecurity term definitions
+* On-demand lookup system
+* Educational reference support
 
-- Encryption / Decryption
+- Fun Fact System
 
-- Spyware, Trojan, Worms
+* Random cybersecurity facts
+* Lightweight engagement feature
 
-- Botnets, DDoS
+- Expanded Cybersecurity Topics
 
-- Brute force attacks
-
-- Biometrics
-
-- Data breaches
-
-- Ethical hacking
-
-- Zero‑day exploits
-
-- And more!
+* Identity theft
+* Social engineering
+* Phishing attacks
+* Encryption / Decryption
+* Spyware, Trojan, Worms
+* Botnets and DDoS attacks
+* Brute force attacks
+* Biometrics
+* Data breaches
+* Ethical hacking
+* Zero-day exploits
+* Password security best practices
+* Network protection fundamentals
 
 # How It Works
+
 1 - Startup Sequence
 
-Plays audio greeting.
+* Plays audio greeting from greeting.wav file.
+* Displays welcome message in GUI.
+* Prompts for user name.
 
-Displays welcome message in GUI.
+2 - Chat Loop & Learning System
 
-Prompts for user name.
+* User interacts via text input
+* ResponseHandler processes queries
+System returns:
+   * Definitions
+   * Awareness tips
+   * Personalized responses
+*Messages are styled and auto-scrolled
 
-2 - Chat Loop
+3 - Quiz System Flow
 
-User types a question or keyword.
+* User starts quiz session
+* Questions are loaded sequentially
+* User selects answers via buttons
+* System evaluates correctness instantly
+* Score is tracked and displayed at the end
 
-ResponseHandler processes input and returns a definition or tip.
+4 - Task System Flow 
 
-Messages are styled and auto‑scrolled in the RichTextBox.
+* User adds tasks through UI
+* Tasks are stored in TaskManager
+* UI refreshes to display updated list
+* User can complete or delete tasks
+* Task state updates instantly in memory
 
-3 - Buttons & Actions
+- Activity Logging Flow
 
-Fun Fact -> shows a random cybersecurity fact.
-
-Glossary -> shows all terms or defines a specific one.
-
-Clear Chat -> resets the conversation and memory.
+* Every major action is recorded
+Logs include:
+  * Timestamp
+  * Action description
+* UI displays live activity history
 
 # Project Structure
 
-- MainWindow.xaml / MainWindow.cs  
-WPF GUI, audio greeting, input handling, auto‑scroll, buttons.
-
-- ResponseHandler.cs  
-Core logic for awareness topics, tips, personality, memory.
-
-- MemoryManager.cs  
-Stores and recalls user’s favourite topics.
-
-- SentimentAnalyzer.cs  
-Detects sentiment and adjusts responses.
-
-- FunFacts.cs  
-Provides random cybersecurity facts.
-
-- GlossaryManager.cs  
-Manages definitions and glossary display.
+- MainWindow.xaml / MainWindow.cs
+* WPF UI layer, event handling, quiz/task integration, logging, chat interface
+- ResponseHandler.cs
+* Core cybersecurity chatbot logic
+- QuizManager.cs
+* Handles quiz logic, scoring, and question progression
+- TaskManager.cs
+* Manages task creation, updates, and deletion
+- TaskItem.cs
+* Data model representing individual tasks
+- ActivityLog.cs
+* Central logging system for user actions
+- MemoryManager.cs
+* Stores user preferences and memory-based responses
+- SentimentAnalyzer.cs
+* Detects sentiment and adjusts responses
+- FunFacts.cs
+* Generates random cybersecurity facts
+- GlossaryManager.cs
+* Handles cybersecurity term definitions
 
 # Requirements
 
@@ -105,31 +157,45 @@ Manages definitions and glossary display.
 
 # Usage
 
-1 - Clone the repository.
-
-2 - Place your recorded greeting.wav in the project directory.
-
-3 - Build and run the project.
-
-4 - Interact with the bot via the GUI: type questions, click buttons, and explore topics.
+1 - Clone the repository
+2 - Place greeting.wav in the build output directory (bin/Debug or bin/Release)
+3 - Build and run the project
+4 - Interact using:
+   * Chat system
+   * Quiz system
+   * Task manager
+   * Activity log tracking
 
 # Example Interaction
 
-Bot: Welcome to CyberSecurity AwarenessBot! Please enter your name to begin.
-You: Randima Ndivho
-Bot: Nice to meet you, Randima Ndivho! Ask me about cybersecurity topics like phishing, passwords, or privacy.
-You: define keylogger
-Bot: A keylogger records keyboard activity to steal passwords and sensitive information.
-Tip for you, Randima Ndivho: Use antivirus software and avoid suspicious downloads.
+Ask me about cybersecurity topics like phishing, passwords, or privacy.
+Bot: Welcome to CyberAwarenessBot! Please enter your name.
+User: Randima Ndivho
+Bot: Nice to meet you, Randima Ndivho. Ask me about cybersecurity topics like phishing, passwords, or privacy.
+
+User starts quiz
+
+Bot: What is malware?
+User selects: Malicious software
+Bot: Correct!
+
+System: Task "Study cybersecurity" added
+System: Activity logged: Quiz completed
+System: Your score: 12/15
 
 # Credits
 
-Developed by Randima Ndivho for a cybersecurity awareness project.
-Upgraded to WPF GUI with expanded awareness topics and interactive features for Part 2.
+Developed by Randima Ndivho
+Expanded into a full WPF cybersecurity learning system featuring:
+
+* Chatbot intelligence
+* Quiz engine
+* Task management
+* Activity tracking
 
 # License
 
-This project is for educational purposes.
+This project is for educational purposes only.
 
 # References
 
