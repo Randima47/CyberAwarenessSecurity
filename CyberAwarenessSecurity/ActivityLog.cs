@@ -13,6 +13,9 @@ namespace CyberAwarenessSecurity
     {
         private static List<ActivityEntry> entries = new List<ActivityEntry>();
 
+        //  NEW: notify UI when something changes
+        public static event Action LogUpdated;
+
         public static void Add(string action)
         {
             entries.Add(new ActivityEntry
@@ -20,6 +23,9 @@ namespace CyberAwarenessSecurity
                 Timestamp = DateTime.Now,
                 Action = action
             });
+
+            //  notify listeners
+            LogUpdated?.Invoke();
         }
 
         public static List<ActivityEntry> GetEntries()
@@ -30,6 +36,7 @@ namespace CyberAwarenessSecurity
         public static void Clear()
         {
             entries.Clear();
+            LogUpdated?.Invoke();
         }
     }
 }
