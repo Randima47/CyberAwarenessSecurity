@@ -7,16 +7,19 @@ This version focuses on structured logic, object-based design, and modular syste
 # Features
 
 - Audio Greeting: Plays a custom recorded .wav file on startup.
+
 * Plays a .wav file on startup
 * Creates an immersive onboarding experience for users.
 
 - Cybersecurity Awareness Chat
+
 * RichTextBox - based chat interface
 * Colour - coded responses for definitions, tips, and personality answers.
 * Personalised interaction - Remembers user’s name and favourite topics for a tailored experience.
 * Memory recall - Stores and recalls user’s favourite topics for deeper learning.
 
 - Quiz System
+
 Interactive cybersecurity quiz engine featuring:
 
 * Multiple-choice questions
@@ -24,6 +27,7 @@ Interactive cybersecurity quiz engine featuring:
 * Instant feedback per answer
 * Final score summary
 * Sequential question flow managed by QuizManager
+
 Topics include:
 
 * Malware
@@ -36,6 +40,7 @@ Topics include:
 * And many more!
 
 - Task Manager System
+
 A lightweight productivity module integrated into the app:
 
 * Add tasks with title, description, and optional reminder date
@@ -49,6 +54,7 @@ Built using:
 * TaskItem (data model)
 
 - Activity Log System
+
 Tracks user interactions across all application
 
 * Logs all major actions ( Quiz answers, Task Upadates, Resets, etc. )
